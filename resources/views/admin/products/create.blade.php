@@ -5,11 +5,12 @@
 <div class="pagehead">
     <div>
         <h1>নতুন পণ্য যোগ করুন</h1>
-        <div class="sub"><a href="{{ route('admin.products') }}">← পণ্য তালিকায় ফিরুন</a></div>
+        <div class="sub"><a href="{{ route('admin.products') }}">পণ্য <span aria-hidden="true">/</span> পণ্য তালিকায় ফিরুন</a></div>
     </div>
 </div>
 
-<form method="POST" action="{{ route('admin.products.store') }}" class="product-form" enctype="multipart/form-data">
+<p class="product-create-intro">পণ্যের তথ্য, ছবি, মূল্য, স্টক ও ভ্যারিয়েন্ট এক জায়গা থেকে সহজে যোগ করুন।</p>
+<form method="POST" action="{{ route('admin.products.store') }}" class="product-form product-create-reference" enctype="multipart/form-data">
     @csrf
     @include('admin.products._form')
     <section class="panel" style="margin-top:20px">

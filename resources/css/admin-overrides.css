@@ -215,3 +215,28 @@ textarea.form-input { min-height:90px; }
 @media(max-width:991.98px) { .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .dashboard-grid { grid-template-columns:1fr; } .content { padding:18px; } }
 @media(max-width:767.98px) { .pagehead { align-items:flex-start; flex-wrap:wrap; } .pagehead h1 { font-size:21px; } .inventory-stock-grid, .order-summary-grid, .form-grid, .formgrid { grid-template-columns:1fr; } .formgrid .full { grid-column:auto; } .product-form .field-row, .variant-manager .field-row, .inventory-stock-grid .field-row, .order-return-form .field-row { grid-template-columns:1fr; } }
 @media(max-width:575.98px) { .content { padding:14px; } .panel { padding:14px; } .stats { gap:10px; } .stat { padding:13px; } .stat .value { font-size:20px; } .table th, .table td { padding:9px; } }
+
+/* Reference-style add-product form, scoped to the create page only. */
+.product-create-intro{max-width:1072px;margin:-8px auto 18px;color:#53665c;font-size:14px}
+.product-create-reference{max-width:1072px;margin:0 auto 48px}
+.product-create-reference .panel{padding:0;border:1px solid #dce5de;border-radius:14px;overflow:hidden;box-shadow:0 2px 4px #193e2410;background:#fff}
+.product-create-reference .panelhead{padding:18px 24px;border-bottom:1px solid #dce5de;background:#fff}
+.product-create-reference .panelhead h3{font-size:20px;letter-spacing:-.02em;margin:0;color:#172820}
+.product-create-reference .form-body{padding:20px 24px}
+.product-create-reference .panel>p{padding:0 24px;color:#53665c}
+.product-create-reference .field{margin:0 0 16px}
+.product-create-reference .field label{font-size:14px;font-weight:650;color:#172820}
+.product-create-reference .form-input{min-height:42px;border-color:#bacbc0;border-radius:8px}
+.product-create-reference .rich-text-editor{border-color:#bacbc0;border-radius:8px}
+.product-create-reference .form-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding:12px 0}
+.product-create-reference .form-actions .btn{min-height:44px;padding:10px 18px;border-radius:8px}
+.product-create-reference #new-product-variants:empty{display:none}
+.product-create-reference [data-variant-row]{background:#f7faf7;border-color:#dce5de!important}
+.product-create-reference .gallery-upload-preview figure{background:#fff}
+@media(max-width:767.98px){
+  .product-create-intro{margin:0 0 14px}
+  .product-create-reference .panelhead,.product-create-reference .form-body{padding:15px}
+  .product-create-reference .panel>p{padding:0 15px}
+  .product-create-reference .form-actions{justify-content:stretch}
+  .product-create-reference .form-actions .btn{flex:1 1 180px;text-align:center}
+}
