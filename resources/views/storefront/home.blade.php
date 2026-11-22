@@ -47,11 +47,11 @@
             @endif
         @endforeach
 
-        @if(count($frontendProducts) > 0)
+        @if($frontendProducts->count() > 0)
             <section class="section bestsellers-section">
                 <div class="sectionhead"><div><span class="section-kicker">{{ $homepageContent['featuredKicker'] }}</span><h2>{{ $homepageContent['featuredTitle'] }}</h2></div><a href="{{ route('shop') }}">সব পণ্য →</a></div>
                 <div class="products">
-                    @foreach(array_slice($frontendProducts, 0, 8) as $product)
+                    @foreach($frontendProducts as $product)
                         <article class="product">
                             <div class="product-image-wrap"><a href="{{ $product['url'] }}"><img src="{{ $product['img'] }}" alt="{{ $product['name'] }}" loading="lazy"></a>@if($product['tag'])<span class="bc-product-tag">{{ $product['tag'] }}</span>@endif</div>
                             <div class="product-info">
@@ -73,6 +73,11 @@
                         </article>
                     @endforeach
                 </div>
+                @if($frontendProducts->hasPages())
+                    <div class="pagination-wrap">
+                        {{ $frontendProducts->links() }}
+                    </div>
+                @endif
             </section>
         @endif
     </div>

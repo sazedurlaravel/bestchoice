@@ -30,7 +30,7 @@ class HomeController extends Controller
             ])->values()->all(),
         ])->values()->all();
 
-        $frontendProducts = Product::query()->active()->with(['category.parent', 'variants' => fn ($query) => $query->where('is_active', true)])->withCount('variants')->latest()->get()->values()->map(function (Product $product) use ($categoryIndexes): array {
+        $frontendProducts = Product::query()->active()->with(['category.parent', 'variants' => fn ($query) => $query->where('is_active', true)])->withCount('variants')->latest()->paginate(8)->through(function (Product $product) use ($categoryIndexes): array {
             $topLevelCategoryId = $product->category?->parent_id ?? $product->category_id;
 
             return [
@@ -48,7 +48,7 @@ class HomeController extends Controller
                 'img' => $product->display_image,
                 'tag' => $product->is_featured ? 'জনপ্রিয়' : '',
             ];
-        })->all();
+        });
 
         $deliveryCharge = (float) ($settings['delivery_charge'] ?? 60);
         $homepageContent = [
