@@ -22,6 +22,7 @@ class OrderController extends Controller
     {
         $query = Order::with([
             'items.product',
+            'items.variant',
             'shipments:id,order_id,courier,booking_state,local_status,tracking_code',
         ])->latest();
 

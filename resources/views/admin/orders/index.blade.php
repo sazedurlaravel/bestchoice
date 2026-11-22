@@ -139,10 +139,23 @@ $total = $statusCounts->sum();
                         <td>
                             <div class="order-product-lines">
                                 @foreach($order->items->take(3) as $item)
+                                    @php
+                                        $variantOptions = collect([
+                                            'size' => $item->variant?->size,
+                                            'color' => $item->variant?->color,
+                                        ])->filter(fn ($option) => filled($option))->values();
+                                        if ($variantOptions->isEmpty()) {
+                                            $variantOptions = collect($item->variant?->options ?? [])
+                                                ->except('name')
+                                                ->filter(fn ($option) => filled($option))
+                                                ->values();
+                                        }
+                                        $variantLabel = $variantOptions->unique()->implode(' / ') ?: $item->variant_name;
+                                    @endphp
                                     <div class="order-product-line">
                                         <span class="order-product-name" title="{{ $item->product_name }}">{{ $item->product_name }}</span>
-                                        @if($item->variant_name)
-                                            <small class="order-product-variant" title="{{ $item->variant_name }}"><i class="fa-solid fa-sliders"></i> {{ $item->variant_name }}</small>
+                                        @if($variantLabel)
+                                            <small class="order-product-variant" title="{{ $variantLabel }}"><i class="fa-solid fa-sliders"></i> {{ $variantLabel }}</small>
                                         @endif
                                         <small class="muted">×{{ $item->quantity }}</small>
                                     </div>
