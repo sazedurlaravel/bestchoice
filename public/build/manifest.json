@@ -1,0 +1,104 @@
+{
+  "_jquery-DvAISNam.js": {
+    "file": "assets/jquery-DvAISNam.js",
+    "name": "jquery",
+    "imports": [
+      "_rolldown-runtime-BWaJ3C7D.js"
+    ]
+  },
+  "_popper-B_g8fyL9.js": {
+    "file": "assets/popper-B_g8fyL9.js",
+    "name": "popper",
+    "imports": [
+      "_rolldown-runtime-BWaJ3C7D.js"
+    ]
+  },
+  "_rolldown-runtime-BWaJ3C7D.js": {
+    "file": "assets/rolldown-runtime-BWaJ3C7D.js",
+    "name": "rolldown-runtime"
+  },
+  "node_modules/admin-lte/dist/js/adminlte.min.js": {
+    "file": "assets/adminlte.min-B9Lunzii.js",
+    "name": "adminlte.min",
+    "src": "node_modules/admin-lte/dist/js/adminlte.min.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-BWaJ3C7D.js",
+      "_jquery-DvAISNam.js"
+    ]
+  },
+  "node_modules/bootstrap/dist/js/bootstrap.js": {
+    "file": "assets/bootstrap-e-uPxIK8.js",
+    "name": "bootstrap",
+    "src": "node_modules/bootstrap/dist/js/bootstrap.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-BWaJ3C7D.js",
+      "_jquery-DvAISNam.js",
+      "_popper-B_g8fyL9.js"
+    ]
+  },
+  "resources/css/admin-overrides.css": {
+    "file": "assets/admin-overrides-CXWi8mgz.css",
+    "name": "admin-overrides",
+    "names": [
+      "admin-overrides.css"
+    ],
+    "src": "resources/css/admin-overrides.css",
+    "isEntry": true
+  },
+  "resources/css/admin.css": {
+    "file": "assets/admin-B8RCjZbR.css",
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ],
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Dt6AVIyj.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/storefront.css": {
+    "file": "assets/storefront-QNH0wAx-.css",
+    "name": "storefront",
+    "names": [
+      "storefront.css"
+    ],
+    "src": "resources/css/storefront.css",
+    "isEntry": true
+  },
+  "resources/js/admin.js": {
+    "file": "assets/admin-DvQ9fgeB.js",
+    "name": "admin",
+    "src": "resources/js/admin.js",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-BWaJ3C7D.js",
+      "_jquery-DvAISNam.js",
+      "_popper-B_g8fyL9.js"
+    ],
+    "dynamicImports": [
+      "node_modules/bootstrap/dist/js/bootstrap.js",
+      "node_modules/admin-lte/dist/js/adminlte.min.js"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BvRk9kiK.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/storefront.js": {
+    "file": "assets/storefront-D8bazN3B.js",
+    "name": "storefront",
+    "src": "resources/js/storefront.js",
+    "isEntry": true
+  }
+}
