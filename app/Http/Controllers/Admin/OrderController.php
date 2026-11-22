@@ -117,6 +117,8 @@ class OrderController extends Controller
                     }
                 } catch (\Illuminate\Validation\ValidationException $exception) {
                     $courierFailures[] = $order->order_number.': '.(collect($exception->errors())->flatten()->first() ?? 'Courier booking was rejected.');
+                } catch (\RuntimeException $exception) {
+                    $courierFailures[] = $order->order_number.': '.($exception->getMessage() ?: 'Courier booking failed.');
                 } catch (\Throwable $exception) {
                     report($exception);
                     $courierFailures[] = $order->order_number.': Courier booking failed.';

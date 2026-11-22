@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\StoreSetting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class HomepageManagementTest extends TestCase
@@ -35,6 +37,27 @@ class HomepageManagementTest extends TestCase
         $this->assertDatabaseHas('homepage_banners', ['id' => $banner->id, 'is_active' => 1]);
 
         $this->get(route('home'))->assertOk()->assertSee('নতুন কালেকশন')->assertSee('আজই দেখুন');
+    }
+
+    public function test_admin_can_create_homepage_banner_with_uploaded_image(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->post(route('admin.homepage.banners.store'), [
+            'headline' => 'Uploaded banner',
+            'highlight' => 'Today',
+            'button_text' => 'Shop now',
+            'button_url' => '/shop',
+            'image_upload' => UploadedFile::fake()->image('banner.jpg'),
+            'background_color' => '#ffffff',
+            'sort_order' => 1,
+            'is_active' => 1,
+        ])->assertRedirect(route('admin.homepage'));
+
+        $banner = HomepageBanner::query()->where('headline', 'Uploaded banner')->firstOrFail();
+        $this->assertStringContainsString('/storage/homepage-banners/', $banner->image_url);
+        $this->assertCount(1, Storage::disk('public')->allFiles('homepage-banners'));
     }
 
     public function test_admin_can_update_homepage_section_content_from_settings(): void

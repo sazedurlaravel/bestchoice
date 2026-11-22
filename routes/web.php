@@ -31,6 +31,13 @@ use App\Http\Controllers\Storefront\TrackOrderController;
 use App\Http\Controllers\Storefront\WishlistController;
 use Illuminate\Support\Facades\Route;
 
+// Laravel Boost posts browser logs here; keep direct browser visits from becoming
+// an unhelpful 405 while preserving the POST-only log ingestion route.
+Route::get('/_boost/browser-logs', fn () => response()->json([
+    'status' => 'ready',
+    'message' => 'Browser logs are accepted via POST.',
+]));
+
 // ---- Storefront ----
 Route::get('/', HomeController::class)->name('home');
 Route::get('/shop', SearchController::class)->name('shop');

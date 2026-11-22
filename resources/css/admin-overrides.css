@@ -131,6 +131,9 @@ body { font-size: 14px; }
 .orders-row-actions .iconbtn { width:28px; height:28px; font-size:11px; }
 .order-edit-link { display:inline-flex; align-items:center; gap:4px; padding:4px 7px; border-radius:5px; color:var(--bc-green); font-size:11px; font-weight:700; text-decoration:none; }
 .order-edit-link:hover { background:#eaf3ed; color:var(--bc-green-dark); }
+.order-steadfast-form { display:inline-flex; margin:0; }
+.order-steadfast-btn { display:inline-flex; align-items:center; gap:4px; border:0; padding:5px 7px; border-radius:5px; background:#6f42c1; color:#fff; font-size:11px; font-weight:700; cursor:pointer; }
+.order-steadfast-btn:hover { background:#59339d; }
 .order-product-image, .order-image-placeholder { display:inline-grid; place-items:center; width:48px; height:48px; border-radius:6px; border:1px solid #e5e9e6; background:#f7faf8; color:#9aa9a0; object-fit:cover; }
 .order-product-name { max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; font-weight:700; }
 .order-product-lines { display:flex; flex-direction:column; gap:4px; width:250px; max-width:250px; overflow:hidden; }
@@ -143,6 +146,9 @@ body { font-size: 14px; }
 .order-status-badge { display:inline-block; padding:4px 9px; border-radius:20px; font-size:11px; font-weight:700; }
 .order-status-form { margin-top:6px; }
 .order-status-form .form-input { width:130px; padding:4px 6px; font-size:11px; border-radius:6px; }
+.order-review-form { margin-top:5px; }
+.order-review-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid #16a34a; padding:4px 7px; border-radius:5px; background:#ecfdf5; color:#15803d; font-size:11px; font-weight:700; cursor:pointer; }
+.order-review-btn:hover { background:#16a34a; color:#fff; }
 .order-staff, .order-courier { display:inline-flex; align-items:center; gap:5px; color:var(--bc-green); font-weight:700; font-size:11px; }
 .order-courier { color:#2563eb; }
 .order-staff i, .order-courier i { font-size:10px; }

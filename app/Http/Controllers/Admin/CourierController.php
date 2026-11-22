@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class CourierController extends Controller
 {
@@ -47,7 +48,15 @@ class CourierController extends Controller
         }
 
         $data = $request->validate(['note' => ['nullable', 'string', 'max:500']]);
-        $shipment = $steadfast->book($order, $data['note'] ?? null);
+        try {
+            $shipment = $steadfast->book($order, $data['note'] ?? null);
+        } catch (ValidationException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return back()->with('error', 'Steadfast booking failed. Please check the courier settings and try again.');
+        }
 
         return back()->with($shipment->booking_state === 'booked' ? 'success' : 'error', $shipment->booking_state === 'booked' ? 'Shipment booked with Steadfast.' : ($shipment->failure_reason ?? 'Shipment booking needs reconciliation.'));
     }

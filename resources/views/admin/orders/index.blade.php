@@ -126,6 +126,15 @@ $total = $statusCounts->sum();
                                 <a href="{{ route('admin.orders.show', $order) }}" class="iconbtn" title="বিস্তারিত দেখুন"><i class="fa-solid fa-eye"></i></a>
                                 <a href="{{ route('admin.orders.show', $order) }}" class="order-edit-link" title="অর্ডার এডিট করুন"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
                                 <a href="{{ route('admin.orders.print', $order) }}" class="iconbtn" title="ইনভয়েস প্রিন্ট করুন" target="_blank"><i class="fa-solid fa-print"></i></a>
+                                @php
+                                    $steadfastShipment = $order->shipments->firstWhere('courier', 'steadfast');
+                                @endphp
+                                @if($order->status !== 'cancelled' && ! $steadfastShipment)
+                                    <form method="POST" action="{{ route('admin.orders.steadfast.book', $order) }}" class="order-steadfast-form" onsubmit="return confirm('এই অর্ডারটি Steadfast-এ পাঠাবেন?')">
+                                        @csrf
+                                        <button type="submit" class="order-steadfast-btn" title="Steadfast-এ পাঠান"><i class="fa-solid fa-truck-fast"></i> Steadfast</button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                         <td><small>{{ $order->created_at->format('d M Y') }}<br>{{ $order->created_at->format('h:i A') }}</small></td>
@@ -180,6 +189,12 @@ $total = $statusCounts->sum();
                             @if($order->payment_method === 'cash_on_delivery')
                                 @php $rsBadge = match($order->review_status) { 'ready' => ['🟢', '#16a34a', '#dcfce7', 'Ready'], 'needs_confirmation' => ['🟡', '#d97706', '#fef3c7', 'Confirm'], 'needs_correction' => ['🔴', '#dc2626', '#fee2e2', 'Correct'], default => ['⚪', '#6b7280', '#f3f4f6', 'Pending'] }; @endphp
                                 <small style="color:{{ $rsBadge[1] }};font-weight:700">{{ $rsBadge[0] }} {{ $rsBadge[3] }}</small>
+                                @if(in_array($order->review_status, ['needs_confirmation', 'needs_correction'], true))
+                                    <form method="POST" action="{{ route('admin.orders.review.confirm', $order) }}" class="order-review-form">
+                                        @csrf
+                                        <button type="submit" class="order-review-btn" title="Approve COD review"><i class="fa-solid fa-check"></i> Approve COD</button>
+                                    </form>
+                                @endif
                             @endif
                         </td>
                         <td style="max-width:140px">

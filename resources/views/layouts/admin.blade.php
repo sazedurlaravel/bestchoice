@@ -60,6 +60,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/admin.css', 'resources/css/admin-overrides.css', 'resources/js/admin.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed accent-success">
@@ -96,7 +97,22 @@
                     <li class="nav-header">OVERVIEW</li>
                     <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link @if(request()->routeIs('admin.dashboard')) active @endif"><i class="nav-icon fa-solid fa-chart-pie"></i><p>Dashboard</p></a></li>
                     @if(auth()->user()->isAdmin())<li class="nav-item"><a href="{{ route('admin.staff') }}" class="nav-link @if(request()->routeIs('admin.staff*')) active @endif"><i class="nav-icon fa-solid fa-user-shield"></i><p>Staff & Permissions</p></a></li>@endif
-                    @if(auth()->user()->hasPermission('homepage.manage'))<li class="nav-item"><a href="{{ route('admin.homepage') }}" class="nav-link @if(request()->routeIs('admin.homepage*')) active @endif"><i class="nav-icon fa-solid fa-panorama"></i><p>Homepage Management</p></a></li>@endif
+                    @if(auth()->user()->hasPermission('homepage.manage') || auth()->user()->hasPermission('settings.manage'))
+                        <li class="nav-item has-treeview @if(request()->routeIs('admin.homepage*', 'admin.settings*')) menu-open @endif">
+                            <a href="{{ route('admin.settings') }}" class="nav-link @if(request()->routeIs('admin.homepage*', 'admin.settings*')) active @endif"><i class="nav-icon fa-solid fa-gear"></i><p>System Settings<i class="right fas fa-angle-left"></i></p></a>
+                            <ul class="nav nav-treeview">
+                                @if(auth()->user()->hasPermission('homepage.manage'))<li class="nav-item"><a href="{{ route('admin.homepage') }}" class="nav-link @if(request()->routeIs('admin.homepage*')) active @endif"><i class="far fa-circle nav-icon"></i><p>Banners</p></a></li>@endif
+                                @if(auth()->user()->hasPermission('settings.manage'))
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Store Information</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Header &amp; Footer</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Homepage Layout</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Theme Colors</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>COD Review</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings.courier.steadfast') }}" class="nav-link @if(request()->routeIs('admin.settings.courier.steadfast*')) active @endif"><i class="far fa-circle nav-icon"></i><p>Steadfast Courier</p></a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                     @if(auth()->user()->hasPermission('orders.manage'))<li class="nav-item"><a href="{{ route('admin.orders') }}" class="nav-link @if(request()->routeIs('admin.orders*')) active @endif"><i class="nav-icon fa-solid fa-bag-shopping"></i><p>Orders</p></a></li>@endif
                     <li class="nav-header">STORE MANAGEMENT</li>
                     @if(auth()->user()->hasPermission('products.manage'))<li class="nav-item"><a href="{{ route('admin.products') }}" class="nav-link @if(request()->routeIs('admin.products*')) active @endif"><i class="nav-icon fa-solid fa-box-open"></i><p>Products</p></a></li>@endif
@@ -107,7 +123,6 @@
                     @if(auth()->user()->hasPermission('coupons.manage'))<li class="nav-item"><a href="{{ route('admin.coupons') }}" class="nav-link @if(request()->routeIs('admin.coupons*')) active @endif"><i class="nav-icon fa-solid fa-ticket"></i><p>Coupons & Discounts</p></a></li>@endif
                     @if(auth()->user()->hasPermission('payments.manage'))<li class="nav-item"><a href="{{ route('admin.payments') }}" class="nav-link @if(request()->routeIs('admin.payments*')) active @endif"><i class="nav-icon fa-solid fa-credit-card"></i><p>Payments</p></a></li>@endif
                     <li class="nav-header">CONFIGURATION</li>
-                    @if(auth()->user()->hasPermission('settings.manage'))<li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link @if(request()->routeIs('admin.settings*')) active @endif"><i class="nav-icon fa-solid fa-gear"></i><p>Settings</p></a></li>@endif
                     @if(auth()->user()->hasPermission('audit.view'))<li class="nav-item"><a href="{{ route('admin.audit-logs') }}" class="nav-link @if(request()->routeIs('admin.audit-logs')) active @endif"><i class="nav-icon fa-solid fa-shield-halved"></i><p>Audit Logs</p></a></li>@endif
                     <li class="nav-item"><a href="{{ route('home') }}" class="nav-link"><i class="nav-icon fa-solid fa-arrow-up-right-from-square"></i><p>View Store</p></a></li>
                 </ul>
@@ -128,6 +143,7 @@
     </div>
     <footer class="main-footer text-sm"><strong>Best Choice Online Shopping</strong><span class="float-right d-none d-sm-inline">AdminLTE 3</span></footer>
 </div>
+@include('partials.flash-alerts')
 @stack('scripts')
 </body>
 </html>

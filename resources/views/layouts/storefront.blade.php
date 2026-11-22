@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/storefront.css', 'resources/js/storefront.js'])
 </head>
 <body>
@@ -34,5 +35,6 @@
     @include('storefront.partials.variant-picker')
     <div class="overlay" id="overlay"></div>
     <div class="toast" id="toast"></div>
+    @include('partials.flash-alerts')
 </body>
 </html>
