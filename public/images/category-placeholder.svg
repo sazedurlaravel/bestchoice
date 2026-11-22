@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title">
+  <title id="title">Category image unavailable</title>
+  <rect width="600" height="600" fill="#f7f8f4"/>
+  <path d="M214 204h172l48 84-54 30v132H220V318l-54-30 48-84Z" fill="#dce8dc"/>
+  <path d="M270 204c0 30 14 52 30 52s30-22 30-52" fill="none" stroke="#164c39" stroke-width="14" stroke-linecap="round"/>
+  <path d="m214 204-48 84 54 30M386 204l48 84-54 30" fill="none" stroke="#164c39" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220 450h160" stroke="#b5c8b5" stroke-width="10" stroke-linecap="round"/>
+</svg>

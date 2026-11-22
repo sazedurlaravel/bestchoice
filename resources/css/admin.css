@@ -1,0 +1,21 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "admin-lte/dist/css/adminlte.min.css";
+
+:root {
+    --bc-green: #164c39;
+    --bc-green-dark: #103b2c;
+    --bc-gold: #d9903b;
+    --bc-border: #e3eae5;
+    --bc-muted: #73837b;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Noto Sans Bengali", sans-serif;
+}
+
+body { color: #21362c; }
+.content-wrapper { background: #f5f7f5; }

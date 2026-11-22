@@ -1,0 +1,8 @@
+@php
+    $footerDescription = $storeSettings['footer_description'] ?? ($storeSettings['store_description'] ?? 'ফ্যাশন, ইলেকট্রনিক্স, হোম ও কিচেন, বিউটি এবং অ্যাকসেসরিজের অনলাইন শপিং—সব এক জায়গায়।');
+    $footerCopyright = $storeSettings['footer_copyright_text'] ?? $storeName;
+@endphp
+<footer class="footer" id="contact">
+    <div class="wrap footgrid"><div id="about"><h2>{{ $storeName }}</h2><p>{{ $footerDescription }}</p>@if(!empty($storeSettings['phone']))<a href="tel:{{ $storeSettings['phone'] }}">ফোন: {{ $storeSettings['phone'] }}</a>@endif @if(!empty($storeSettings['store_email']))<a href="mailto:{{ $storeSettings['store_email'] }}">ইমেইল: {{ $storeSettings['store_email'] }}</a>@endif @if(!empty($storeSettings['store_address']))<span>{{ $storeSettings['store_address'] }}</span>@endif</div><div><b>শপিং</b><a href="{{ route('search') }}">সব পণ্য</a><a aria-label="কার্ট খুলুন" data-cart-drawer-open href="{{ route('cart.index') }}">কার্ট</a><a href="{{ route('wishlist') }}">উইশলিস্ট</a><a href="{{ auth()->check() ? route('account') : route('login') }}">আমার অ্যাকাউন্ট</a></div><div><b>সহায়তা</b><a href="{{ route('contact') }}">যোগাযোগ</a><a href="{{ route('faq') }}">সাধারণ প্রশ্ন</a><a href="{{ route('policy') }}">নীতিমালা</a><a href="{{ route('track') }}">অর্ডার ট্র্যাক</a>@if(!empty($storeSettings['facebook_url']))<a href="{{ $storeSettings['facebook_url'] }}" target="_blank" rel="noopener">Facebook</a>@endif @if(!empty($storeSettings['instagram_url']))<a href="{{ $storeSettings['instagram_url'] }}" target="_blank" rel="noopener">Instagram</a>@endif</div></div>
+    <div class="wrap" style="border-top:1px solid #ffffff30;margin-top:24px;padding-top:16px;font-size:13px;text-align:center">© {{ now()->year }} {{ $footerCopyright }}</div>
+</footer>

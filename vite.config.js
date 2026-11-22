@@ -1,0 +1,26 @@
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/css/storefront.css',
+                'resources/css/admin.css',
+                'resources/css/admin-overrides.css',
+                'resources/js/app.js',
+                'resources/js/storefront.js',
+                'resources/js/admin.js',
+            ],
+            refresh: true,
+        }),
+        tailwindcss(),
+    ],
+    server: {
+        watch: {
+            ignored: ['**/storage/framework/views/**'],
+        },
+    },
+});
