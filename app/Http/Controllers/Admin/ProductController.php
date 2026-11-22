@@ -149,6 +149,7 @@ class ProductController extends Controller
             'stock_quantity' => ['required', 'integer', 'min:0'],
             'stock_operation_key' => ['required', 'uuid'],
             'variants' => ['nullable', 'array', 'max:100'],
+            'has_variants' => ['nullable', 'boolean'],
             'variants.*.name' => ['required', 'string', 'max:255'],
             'variants.*.sku' => ['required', 'string', 'max:255', 'distinct', 'unique:product_variants,sku'],
             'variants.*.size' => ['nullable', 'required_without:variants.*.color', 'string', 'max:255'],
@@ -182,6 +183,7 @@ class ProductController extends Controller
         unset($data['gallery_images']);
         $variants = $data['variants'] ?? [];
         unset($data['variants']);
+        unset($data['has_variants']);
         $variants = $this->expandVariantOptions($variants);
         foreach ($variants as $index => $variant) {
             $selling = (float) ($variant['price_override'] ?? $data['selling_price']);
@@ -198,13 +200,12 @@ class ProductController extends Controller
         }
 
         $stock = (int) $data['stock_quantity'];
+        if ($request->boolean('has_variants') || $variants !== []) {
+            $stock = 0;
+        }
         $operationKey = $data['stock_operation_key'];
         unset($data['stock_operation_key']);
         $data['stock_quantity'] = 0;
-
-        if ($variants !== [] && $stock !== 0) {
-            throw ValidationException::withMessages(['stock_quantity' => 'ভ্যারিয়েন্ট যোগ করলে মূল পণ্যের স্টক শূন্য রাখুন; স্টক প্রতিটি ভ্যারিয়েন্টে দিন।']);
-        }
 
         DB::transaction(function () use ($data, $stock, $operationKey, $request, $variants, $galleryImages, $galleryUploads): void {
             $product = Product::create($data);
@@ -229,10 +230,10 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $product->load('variants');
+        $product->load(['variants', 'images']);
         $categories = Category::active()->with('parent')->orderBy('name')->get();
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.create', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
@@ -249,6 +250,19 @@ class ProductController extends Controller
             'stock_quantity' => ['required', 'integer', 'min:0'],
             'expected_stock' => ['required', 'integer', 'min:0'],
             'stock_operation_key' => ['required', 'uuid'],
+            'has_variants' => ['nullable', 'boolean'],
+            'variants' => ['nullable', 'array', 'max:100'],
+            'variants.*.id' => ['nullable', 'integer'],
+            'variants.*.name' => ['required', 'string', 'max:255'],
+            'variants.*.sku' => ['required', 'string', 'max:255', 'distinct'],
+            'variants.*.size' => ['nullable', 'required_without:variants.*.color', 'string', 'max:255'],
+            'variants.*.color' => ['nullable', 'required_without:variants.*.size', 'string', 'max:255'],
+            'variants.*.price_override' => ['nullable', 'numeric', 'min:0', 'max:9999999999.99'],
+            'variants.*.regular_price' => ['nullable', 'numeric', 'min:0', 'max:9999999999.99'],
+            'variants.*.stock_quantity' => ['required', 'integer', 'min:0'],
+            'variants.*.expected_stock' => ['required', 'integer', 'min:0'],
+            'variants.*.stock_operation_key' => ['required', 'uuid'],
+            'variants.*.is_active' => ['nullable', 'boolean'],
             'low_stock_threshold' => ['required', 'integer', 'min:0'],
             'main_image' => ['nullable', 'url', 'max:255'],
             'main_image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
@@ -282,12 +296,43 @@ class ProductController extends Controller
         unset($data['remove_gallery_image_ids']);
         unset($data['gallery_images']);
 
+        $hasVariants = $request->boolean('has_variants');
+        $variants = $this->expandVariantOptions($data['variants'] ?? []);
+        unset($data['variants'], $data['has_variants']);
+
+        foreach ($variants as $index => $variant) {
+            $selling = (float) ($variant['price_override'] ?? $data['selling_price']);
+            $regular = $variant['regular_price'] ?? $data['regular_price'] ?? null;
+            if ($regular !== null && (float) $regular < $selling) {
+                throw ValidationException::withMessages(["variants.{$index}.regular_price" => 'ভ্যারিয়েন্টের নিয়মিত মূল্য বিক্রয় মূল্যের চেয়ে কম হতে পারবে না।']);
+            }
+
+            $skuQuery = ProductVariant::query()->where('sku', $variant['sku']);
+            if (filled($variant['id'] ?? null)) {
+                $skuQuery->whereKeyNot($variant['id']);
+            }
+            if ($skuQuery->exists()) {
+                throw ValidationException::withMessages(["variants.{$index}.sku" => 'এই SKU ইতিমধ্যে ব্যবহৃত হয়েছে।']);
+            }
+
+            $key = ProductVariant::combinationKeyFor($variant['size'] ?? null, $variant['color'] ?? null);
+            foreach (array_slice($variants, 0, $index) as $previous) {
+                if (ProductVariant::combinationKeyFor($previous['size'] ?? null, $previous['color'] ?? null) === $key) {
+                    throw ValidationException::withMessages(["variants.{$index}.size" => 'একই সাইজ ও রঙের ভ্যারিয়েন্ট একাধিকবার দেওয়া হয়েছে।']);
+                }
+            }
+        }
+
         $stock = (int) $data['stock_quantity'];
         $expectedStock = (int) $data['expected_stock'];
         $operationKey = $data['stock_operation_key'];
         unset($data['stock_quantity'], $data['expected_stock'], $data['stock_operation_key']);
 
-        DB::transaction(function () use ($product, $data, $stock, $expectedStock, $operationKey, $request, $galleryImages, $galleryUploads, $removeGalleryImageIds): void {
+        if ($hasVariants || $variants !== []) {
+            $stock = 0;
+        }
+
+        DB::transaction(function () use ($product, $data, $stock, $expectedStock, $operationKey, $request, $galleryImages, $galleryUploads, $removeGalleryImageIds, $variants): void {
             $lockedProduct = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
             $lockedProduct->fill($data);
             foreach ($lockedProduct->variants()->orderBy('id')->lockForUpdate()->get() as $variant) {
@@ -310,6 +355,30 @@ class ProductController extends Controller
                 $lockedProduct->images()->create(['image_path' => Storage::disk('public')->url($upload->store('products', 'public')), 'alt_text' => null, 'sort_order' => $nextSortOrder + $offset++]);
             }
             $this->inventory->setStock($lockedProduct, $stock, 'পণ্য ফর্মে স্টক সমন্বয়', $request->user()->id, null, $operationKey, $expectedStock);
+
+            foreach ($variants as $variantData) {
+                $variantId = $variantData['id'] ?? null;
+                $record = $variantId
+                    ? $lockedProduct->variants()->whereKey($variantId)->lockForUpdate()->firstOrFail()
+                    : new ProductVariant(['product_id' => $lockedProduct->id, 'stock_quantity' => 0, 'is_active' => true]);
+                $attributes = $variantData;
+                unset($attributes['id'], $attributes['stock_quantity'], $attributes['expected_stock'], $attributes['stock_operation_key']);
+                if (! array_key_exists('is_active', $attributes)) {
+                    $attributes['is_active'] = $record->exists ? $record->is_active : true;
+                }
+                $record->fill($attributes);
+                $record->setRelation('product', $lockedProduct);
+                $record->save();
+                $this->inventory->setStock(
+                    $lockedProduct,
+                    (int) $variantData['stock_quantity'],
+                    'পণ্য ফর্মে ভ্যারিয়েন্ট স্টক সমন্বয়',
+                    $request->user()->id,
+                    $record,
+                    $variantData['stock_operation_key'],
+                    (int) $variantData['expected_stock'],
+                );
+            }
         }, 3);
 
         return redirect()->route('admin.products')->with('success', 'পণ্য সফলভাবে আপডেট করা হয়েছে।');

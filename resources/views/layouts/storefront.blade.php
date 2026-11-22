@@ -31,6 +31,7 @@
 
     @include('storefront.partials.footer')
     @include('storefront.partials.cart-drawer')
+    @include('storefront.partials.variant-picker')
     <div class="overlay" id="overlay"></div>
     <div class="toast" id="toast"></div>
 </body>

@@ -27,7 +27,7 @@
         </table>
     </div>
 
-    @foreach($product->variants->concat([null]) as $variant)
+    @foreach($product->variants as $variant)
         @php
             $formKey = $variant ? (string) $variant->id : 'new';
             $variantErrors = $errors->getBag('variant_'.$formKey);
@@ -58,12 +58,10 @@
                     <div class="field">
                         <label for="variant-{{ $formKey }}-size">সাইজ</label>
                         <input id="variant-{{ $formKey }}-size" name="size" value="{{ $submitted ? ($values['size'] ?? '') : ($variant?->size ?? '') }}" class="form-input" maxlength="255" placeholder="S, M, L">
-                        @if(!$variant)<small class="muted">একাধিক সাইজ কমা দিয়ে লিখুন।</small>@endif
                     </div>
                     <div class="field">
                         <label for="variant-{{ $formKey }}-color">রঙ</label>
                         <input id="variant-{{ $formKey }}-color" name="color" value="{{ $submitted ? ($values['color'] ?? '') : ($variant?->color ?? '') }}" class="form-input" maxlength="255" placeholder="Black, White">
-                        @if(!$variant)<small class="muted">একাধিক রঙ কমা দিয়ে লিখুন।</small>@endif
                     </div>
                 </div>
                 <div class="field-row">
@@ -89,7 +87,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-actions"><button type="submit" class="btn">{{ $variant ? 'ভ্যারিয়েন্ট সংরক্ষণ করুন' : 'ভ্যারিয়েন্ট যোগ করুন' }}</button></div>
+                <div class="form-actions"><button type="submit" class="btn">ভ্যারিয়েন্ট সংরক্ষণ করুন</button></div>
             </form>
         </details>
     @endforeach

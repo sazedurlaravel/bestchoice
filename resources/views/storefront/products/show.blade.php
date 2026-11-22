@@ -24,6 +24,11 @@
         'stock' => (int) $variant->stock_quantity,
     ])->values();
     $detailProductData = ['has_variants' => $hasVariants, 'stock' => (int) $product->stock_quantity, 'price' => (float) $product->selling_price, 'regular_price' => $product->regular_price === null ? null : (float) $product->regular_price];
+    $storePhone = trim((string) ($storeSettings['phone'] ?? ''));
+    $whatsappPhone = preg_replace('/\D+/', '', $storePhone);
+    if (str_starts_with($whatsappPhone, '0')) {
+        $whatsappPhone = '88'.$whatsappPhone;
+    }
 @endphp
 
 <div class="page detail-page" data-product-detail>
@@ -137,6 +142,13 @@
                     <button class="detail-purchase detail-buy" type="button" disabled>স্টক নেই</button>
                 @endif
             </div>
+
+            @if($storePhone !== '')
+                <div class="detail-contact-actions">
+                    <a href="tel:{{ preg_replace('/\D+/', '', $storePhone) }}"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>{{ $storePhone }}</span></a>
+                    @if($whatsappPhone !== '')<a href="https://wa.me/{{ $whatsappPhone }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>{{ $storePhone }}</span></a>@endif
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('wishlist.toggle') }}" class="detail-wishlist-form">
                 @csrf

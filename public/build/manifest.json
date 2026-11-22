@@ -39,7 +39,7 @@
     ]
   },
   "resources/css/admin-overrides.css": {
-    "file": "assets/admin-overrides--1MnJBFf.css",
+    "file": "assets/admin-overrides-D1JAZmbJ.css",
     "name": "admin-overrides",
     "names": [
       "admin-overrides.css"
@@ -66,7 +66,7 @@
     "isEntry": true
   },
   "resources/css/storefront.css": {
-    "file": "assets/storefront-BjzV0j9c.css",
+    "file": "assets/storefront-Beb7XdfI.css",
     "name": "storefront",
     "names": [
       "storefront.css"
@@ -75,7 +75,7 @@
     "isEntry": true
   },
   "resources/js/admin.js": {
-    "file": "assets/admin-DvQ9fgeB.js",
+    "file": "assets/admin-Dp3al13_.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,
@@ -96,7 +96,7 @@
     "isEntry": true
   },
   "resources/js/storefront.js": {
-    "file": "assets/storefront-D8bazN3B.js",
+    "file": "assets/storefront-Dg0Hw6QW.js",
     "name": "storefront",
     "src": "resources/js/storefront.js",
     "isEntry": true

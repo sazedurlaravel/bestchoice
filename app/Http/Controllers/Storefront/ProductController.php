@@ -17,7 +17,7 @@ class ProductController extends Controller
             ->active()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
-            ->with('category')
+            ->with(['category', 'variants' => fn ($query) => $query->where('is_active', true)])
             ->withCount('variants')
             ->latest()
             ->take(4)

@@ -30,7 +30,7 @@ class HomeController extends Controller
             ])->values()->all(),
         ])->values()->all();
 
-        $frontendProducts = Product::query()->active()->with(['category.parent'])->withCount('variants')->latest()->get()->values()->map(function (Product $product) use ($categoryIndexes): array {
+        $frontendProducts = Product::query()->active()->with(['category.parent', 'variants' => fn ($query) => $query->where('is_active', true)])->withCount('variants')->latest()->get()->values()->map(function (Product $product) use ($categoryIndexes): array {
             $topLevelCategoryId = $product->category?->parent_id ?? $product->category_id;
 
             return [
@@ -42,7 +42,8 @@ class HomeController extends Controller
                 'regularPrice' => $product->regular_price === null ? null : (float) $product->regular_price,
                 'description' => $product->short_description ?: $product->full_description,
                 'stock' => (int) $product->stock_quantity,
-                'hasVariants' => $product->variants_count > 0,
+                'hasVariants' => $product->variants->isNotEmpty(),
+                'variants' => $product->variants->map(fn ($variant): array => ['id' => $variant->id, 'name' => $variant->name, 'size' => $variant->size, 'color' => $variant->color, 'price' => $variant->effectiveSellingPrice(), 'regular_price' => $variant->effectiveRegularPrice(), 'stock' => (int) $variant->stock_quantity])->values()->all(),
                 'cat' => $categoryIndexes[$topLevelCategoryId] ?? 0,
                 'img' => $product->display_image,
                 'tag' => $product->is_featured ? 'জনপ্রিয়' : '',

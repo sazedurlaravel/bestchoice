@@ -85,6 +85,78 @@ document.querySelectorAll('.gallery-image-inputs').forEach((list) => list.addEve
 
 const couponFeedback = document.querySelector('#couponFeedback');
 const formatMoney = (amount) => `৳${Number(amount).toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+const variantPicker = document.querySelector('#variantPicker');
+const variantPickerOptions = document.querySelector('#variantPickerOptions');
+const variantPickerPrice = document.querySelector('#variantPickerPrice');
+const variantPickerRegularPrice = document.querySelector('#variantPickerRegularPrice');
+const variantPickerForm = document.querySelector('#variantPickerForm');
+const variantPickerProductId = document.querySelector('#variantPickerProductId');
+const variantPickerVariantId = document.querySelector('#variantPickerVariantId');
+const variantPickerError = document.querySelector('#variantPickerError');
+const decodeVariantData = (encoded) => {
+    try {
+        const bytes = Uint8Array.from(atob(encoded), (character) => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+    } catch {
+        return [];
+    }
+};
+const updateVariantPickerPrice = (variant) => {
+    const sellingPrice = Number(variant?.price || 0);
+    const regularPrice = Number(variant?.regular_price || 0);
+    variantPickerPrice.textContent = formatMoney(sellingPrice);
+    if (variantPickerRegularPrice) {
+        variantPickerRegularPrice.textContent = formatMoney(regularPrice);
+        variantPickerRegularPrice.hidden = !(regularPrice > sellingPrice);
+    }
+};
+const closeVariantPicker = () => {
+    if (! variantPicker) return;
+    variantPicker.hidden = true;
+    variantPicker.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('variant-picker-open');
+};
+document.querySelectorAll('[data-variant-picker]').forEach((trigger) => trigger.addEventListener('click', () => {
+    if (! variantPicker) return;
+    const variants = decodeVariantData(trigger.dataset.variants || '');
+    variantPickerProductId.value = trigger.dataset.productId || '';
+    variantPickerVariantId.value = '';
+    variantPickerError.hidden = true;
+    variantPickerOptions.replaceChildren();
+    variants.forEach((variant) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'variant-picker-option';
+        option.disabled = Number(variant.stock) <= 0;
+        option.dataset.variantId = String(variant.id);
+        const title = document.createElement('strong');
+        title.textContent = variant.size || variant.color || variant.name || 'ভ্যারিয়েন্ট';
+        const meta = document.createElement('span');
+        meta.textContent = `${formatMoney(variant.price)} · ${Number(variant.stock) > 0 ? `স্টকে আছে · ${variant.stock} পিস` : 'স্টক নেই'}`;
+        option.append(title, meta);
+        option.addEventListener('click', () => {
+            variantPickerVariantId.value = String(variant.id);
+            updateVariantPickerPrice(variant);
+            variantPickerError.hidden = true;
+            variantPickerOptions.querySelectorAll('.variant-picker-option').forEach((item) => item.classList.toggle('selected', item === option));
+        });
+        variantPickerOptions.append(option);
+    });
+    const firstAvailable = variants.find((variant) => Number(variant.stock) > 0) || variants[0];
+    if (firstAvailable) updateVariantPickerPrice(firstAvailable);
+    variantPicker.hidden = false;
+    variantPicker.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('variant-picker-open');
+    variantPicker.querySelector('.variant-picker-close')?.focus();
+}));
+document.querySelectorAll('[data-variant-picker-close]').forEach((button) => button.addEventListener('click', closeVariantPicker));
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeVariantPicker(); });
+variantPickerForm?.addEventListener('submit', (event) => {
+    if (! variantPickerVariantId.value) {
+        event.preventDefault();
+        variantPickerError.hidden = false;
+    }
+});
 const deliveryZone = document.querySelector('#deliveryZone');
 let currentCheckoutSubtotal = Number(document.querySelector('#checkoutSubtotal')?.dataset.amount || 0);
 let currentCheckoutDiscount = Number(document.querySelector('#checkoutDiscount')?.dataset.amount || 0);

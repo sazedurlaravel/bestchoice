@@ -277,6 +277,30 @@ class AdminInventoryManagementTest extends TestCase
         $this->assertDatabaseHas('inventory_transactions', ['variant_id' => $variant->id, 'product_id' => $product->id, 'stock_before' => 0, 'stock_after' => 4, 'operation_key' => $data['stock_operation_key'], 'user_id' => $admin->id]);
     }
 
+    public function test_main_product_form_updates_existing_variant_stock(): void
+    {
+        $admin = $this->admin();
+        $product = Product::factory()->create(['stock_quantity' => 0]);
+        $variant = $this->variant($product, ['stock_quantity' => 4]);
+        $variantData = [...$this->variantData($variant), 'id' => $variant->id, 'stock_quantity' => 6];
+
+        $this->put(route('admin.products.update', $product), [
+            ...$this->productData($product),
+            'stock_quantity' => 0,
+            'has_variants' => 1,
+            'variants' => [$variantData],
+        ])->assertRedirect(route('admin.products'))->assertSessionHasNoErrors();
+
+        $this->assertSame(6, $variant->refresh()->stock_quantity);
+        $this->assertDatabaseHas('inventory_transactions', [
+            'product_id' => $product->id,
+            'variant_id' => $variant->id,
+            'stock_before' => 4,
+            'stock_after' => 6,
+            'user_id' => $admin->id,
+        ]);
+    }
+
     public function test_new_product_creates_each_comma_separated_size_and_color_combination(): void
     {
         $this->admin();
@@ -549,9 +573,12 @@ class AdminInventoryManagementTest extends TestCase
         $product = Product::factory()->create(['stock_quantity' => 0]);
         $variant = $this->variant($product);
 
-        $this->get(route('admin.products.edit', $product))->assertOk()->assertSee($variant->sku)->assertSee('name="expected_stock"', false)->assertSee('name="stock_operation_key"', false);
-        $this->post(route('admin.products.variants.store', $product), [...$this->variantData(), 'name' => 'Variant only', 'size' => '', 'color' => ''])->assertSessionHasErrors(['size'], null, 'variant_new');
-        $this->get(route('admin.products.edit', $product))->assertOk()->assertSee('value="'.$product->name.'"', false)->assertSee('value="Variant only"', false);
+        $this->get(route('admin.products.edit', $product))
+            ->assertOk()
+            ->assertSee($variant->sku)
+            ->assertSee('name="expected_stock"', false)
+            ->assertSee('name="stock_operation_key"', false)
+            ->assertDontSee('Add New Variant');
     }
 
     public static function historyTypes(): array

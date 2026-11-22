@@ -60,7 +60,7 @@
                                 <div class="product-pricing"><span class="selling-price">৳{{ number_format($product['price'], 0) }}</span>@if($product['regularPrice'])<del class="regular-price" aria-label="নিয়মিত মূল্য">৳{{ number_format($product['regularPrice'], 0) }}</del>@endif</div>
                                 <div class="product-actions">
                                     @if($product['hasVariants'])
-                                        <a href="{{ $product['url'] }}" class="bc-buy-now"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span class="bc-buy-label">অপশন বেছে নিন</span></a>
+                                        <button type="button" class="bc-buy-now" data-variant-picker data-product-id="{{ $product['id'] }}" data-product-name="{{ $product['name'] }}" data-variants="{{ base64_encode(json_encode($product['variants'], JSON_UNESCAPED_UNICODE)) }}"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span class="bc-buy-label">অপশন বেছে নিন</span></button>
                                     @elseif($product['stock'] > 0)
                                         <form method="POST" action="{{ route('cart.add') }}" class="card-cart-form">@csrf<input type="hidden" name="product_id" value="{{ $product['id'] }}"><input type="hidden" name="qty" value="1"><input type="hidden" name="cart_request_id" value="{{ \Illuminate\Support\Str::uuid() }}"><button class="bc-buy-now" type="submit"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span class="bc-buy-label">অর্ডার করুন</span></button></form>
                                     @else

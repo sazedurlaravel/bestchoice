@@ -49,7 +49,7 @@ document.querySelectorAll('[data-rich-text-editor]').forEach((editor) => {
         button.addEventListener('mousedown', (event) => event.preventDefault());
         button.addEventListener('click', () => {
             input.focus();
-            document.execCommand(button.dataset.editorCommand, false);
+            document.execCommand(button.dataset.editorCommand, false, button.dataset.editorValue ?? null);
             syncValue();
         });
     });

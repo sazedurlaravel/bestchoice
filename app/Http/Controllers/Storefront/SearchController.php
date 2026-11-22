@@ -22,7 +22,7 @@ class SearchController extends Controller
         ]);
         $term = trim((string) ($validated['q'] ?? ''));
         $sort = $validated['sort'] ?? 'latest';
-        $query = Product::query()->active()->with('category')->withCount('variants')
+        $query = Product::query()->active()->with(['category', 'variants' => fn ($query) => $query->where('is_active', true)])->withCount('variants')
             ->when($term, fn ($query) => $query->where(fn ($search) => $search->where('name', 'like', "%{$term}%")->orWhere('short_description', 'like', "%{$term}%")))
             ->when($validated['category'] ?? null, fn ($query, $category) => $query->where('category_id', $category))
             ->when(isset($validated['min_price']), fn ($query) => $query->where('selling_price', '>=', $validated['min_price']))

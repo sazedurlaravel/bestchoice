@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $products = Product::query()
             ->whereIn('category_id', $this->categoryTreeIds($category))
             ->active()
-            ->with('category')
+            ->with(['category', 'variants' => fn ($query) => $query->where('is_active', true)])
             ->withCount('variants')
             ->latest()
             ->paginate(15)

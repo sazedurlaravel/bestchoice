@@ -14,7 +14,7 @@ class WishlistController extends Controller
     public function index(Request $request): View
     {
         $ids = array_map('intval', $request->user()?->wishlist_product_ids ?? $request->session()->get('wishlist', []));
-        $products = Product::query()->active()->with('category')->withCount('variants')->whereIn('id', $ids)->get();
+        $products = Product::query()->active()->with(['category', 'variants' => fn ($query) => $query->where('is_active', true)])->withCount('variants')->whereIn('id', $ids)->get();
 
         return view('storefront.wishlist.index', compact('products'));
     }
