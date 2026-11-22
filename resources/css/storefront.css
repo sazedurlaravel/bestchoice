@@ -900,3 +900,14 @@ body{background-color:var(--theme-background,#faf8f1)!important}
 .footer{background-color:var(--theme-footer-background,#153f30)!important}
 .new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-desktop,4),minmax(0,1fr))!important}
 @media(max-width:650px){.new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-mobile,2),minmax(0,1fr))!important}}
+
+/* Keep product-card titles compact and on one line. */
+.products .product h3,
+.products > .product .product-info h3{
+  display:block;
+  height:1.4em;
+  min-height:1.4em;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
