@@ -13,6 +13,20 @@
     @csrf
     @include('admin.products._form')
     <section class="panel" style="margin-top:20px">
+        <div class="panelhead"><h3>দ্রুত ভ্যারিয়েন্ট তৈরি করুন</h3></div>
+        <div class="form-body">
+            <p class="muted">সাইজ ও রঙ কমা দিয়ে লিখুন। সিস্টেম প্রতিটি কম্বিনেশনের জন্য ভ্যারিয়েন্ট তৈরি করবে; পরে প্রতিটি সারিতে SKU, মূল্য ও স্টক ঠিক করতে পারবেন।</p>
+            <div class="field-row" style="margin-top:14px">
+                <div class="field"><label for="variant-builder-sizes">সাইজ</label><input id="variant-builder-sizes" class="form-input" placeholder="যেমন S, M, L"><small class="muted">উদাহরণ: S, M, L</small></div>
+                <div class="field"><label for="variant-builder-colors">রঙ</label><input id="variant-builder-colors" class="form-input" placeholder="যেমন Black, White"><small class="muted">উদাহরণ: Black, White</small></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <button type="button" class="btn secondary" id="generate-product-variants"><i class="fa-solid fa-wand-magic-sparkles"></i> কম্বিনেশন তৈরি করুন</button>
+                <span id="variant-builder-status" class="muted" role="status"></span>
+            </div>
+        </div>
+    </section>
+    <section class="panel" style="margin-top:20px">
         <div class="panelhead"><h3>সাইজ, রঙ ও ভ্যারিয়েন্ট</h3></div>
         <p class="muted">প্রতিটি ভ্যারিয়েন্টের আলাদা SKU, মূল্য ও স্টক যোগ করুন। সাইজ ও রঙ কমা দিয়ে লিখলে প্রতিটি কম্বিনেশনের জন্য আলাদা ভ্যারিয়েন্ট তৈরি হবে। ভ্যারিয়েন্ট ব্যবহার করলে উপরের মূল স্টক শূন্য রাখুন।</p>
         <div id="new-product-variants">
@@ -31,6 +45,42 @@
     @include('admin.products._new-variant-row', ['i' => '__INDEX__', 'variant' => []])
 </template>
 <script>
+/* ── Quick variant builder ──────────────────────────────────── */
+const variantBuilderValues = (input) => [...new Set(input.value.split(',').map((value) => value.trim()).filter(Boolean))];
+document.getElementById('generate-product-variants')?.addEventListener('click', () => {
+    const sizes = variantBuilderValues(document.getElementById('variant-builder-sizes'));
+    const colors = variantBuilderValues(document.getElementById('variant-builder-colors'));
+    const sizeValues = sizes.length ? sizes : [''];
+    const colorValues = colors.length ? colors : [''];
+    const combinations = sizeValues.flatMap((size) => colorValues.map((color) => ({size, color})));
+    const status = document.getElementById('variant-builder-status');
+    const list = document.getElementById('new-product-variants');
+    const template = document.getElementById('new-product-variant-template');
+
+    if (!sizes.length && !colors.length) {
+        status.textContent = 'কমপক্ষে একটি সাইজ বা রঙ লিখুন।';
+        return;
+    }
+    if (combinations.length > 100) {
+        status.textContent = 'সর্বোচ্চ ১০০টি কম্বিনেশন তৈরি করা যাবে।';
+        return;
+    }
+
+    list.replaceChildren();
+    const productName = document.querySelector('[data-product-name]')?.value || '';
+    combinations.forEach(({size, color}, index) => {
+        list.insertAdjacentHTML('beforeend', template.innerHTML.replaceAll('__INDEX__', index));
+        const row = list.lastElementChild;
+        const name = [size, color].filter(Boolean).join(' / ');
+        row.querySelector('[data-variant-name]').value = name;
+        row.querySelector('[name$="[size]"]').value = size;
+        row.querySelector('[name$="[color]"]').value = color;
+        row.querySelector('[data-variant-sku]').value = generateSku(productName + ' ' + name, index);
+    });
+    status.textContent = `${combinations.length}টি ভ্যারিয়েন্ট তৈরি হয়েছে। নিচে মূল্য ও স্টক পূরণ করুন।`;
+    updateStockHint();
+});
+
 /* ── Variant add / remove ───────────────────────────────────── */
 document.getElementById('add-product-variant')?.addEventListener('click', () => {
     const list = document.getElementById('new-product-variants');
