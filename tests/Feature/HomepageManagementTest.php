@@ -88,6 +88,26 @@ class HomepageManagementTest extends TestCase
         $this->assertDatabaseHas('store_settings', ['key' => 'store_name', 'value' => 'Keep This Store']);
     }
 
+    public function test_admin_can_control_homepage_category_limit_and_product_columns(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->put(route('admin.homepage.layout.update'), [
+                'home_collection_category_limit' => 6,
+                'home_product_columns_desktop' => 5,
+                'home_product_columns_mobile' => 3,
+            ])
+            ->assertRedirect()
+            ->assertSessionHas('success', 'Homepage layout settings saved.');
+
+        $this->assertDatabaseHas('store_settings', ['key' => 'home_collection_category_limit', 'value' => '6']);
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('--home-products-desktop:5', false)
+            ->assertSee('--home-products-mobile:3', false);
+    }
+
     public function test_admin_can_update_storefront_header_and_footer_settings(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

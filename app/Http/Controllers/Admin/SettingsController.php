@@ -32,8 +32,11 @@ class SettingsController extends Controller
             'delivery_charge_inside_dhaka' => ['required', 'numeric', 'min:0'],
             'delivery_charge_outside_dhaka' => ['required', 'numeric', 'min:0'],
             'home_collection_subtitle' => ['required', 'string', 'max:255'],
+            'home_collection_category_limit' => ['nullable', 'integer', 'min:1', 'max:24'],
             'home_featured_kicker' => ['required', 'string', 'max:100'],
             'home_featured_title' => ['required', 'string', 'max:255'],
+            'home_product_columns_desktop' => ['nullable', 'integer', 'min:1', 'max:8'],
+            'home_product_columns_mobile' => ['nullable', 'integer', 'min:1', 'max:4'],
             'theme_primary_color' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'theme_accent_color' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'theme_background_color' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
@@ -98,5 +101,20 @@ class SettingsController extends Controller
         }
 
         return back()->with('success', 'COD review settings saved.');
+    }
+
+    public function updateHomepageLayout(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'home_collection_category_limit' => ['required', 'integer', 'min:1', 'max:24'],
+            'home_product_columns_desktop' => ['required', 'integer', 'min:1', 'max:8'],
+            'home_product_columns_mobile' => ['required', 'integer', 'min:1', 'max:4'],
+        ]);
+
+        foreach ($data as $key => $value) {
+            StoreSetting::updateOrCreate(['key' => $key], ['value' => (string) $value]);
+        }
+
+        return back()->with('success', 'Homepage layout settings saved.');
     }
 }

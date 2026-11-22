@@ -3,7 +3,7 @@
 @section('title', 'Best Choice Online Shopping | Fashion, Gadgets, Home & Beauty')
 
 @section('content')
-    <div class="new-home">
+    <div class="new-home" style="--home-products-desktop:{{ $homepageContent['productColumnsDesktop'] }};--home-products-mobile:{{ $homepageContent['productColumnsMobile'] }}">
         <section class="bc-hero" aria-label="Featured offers">
             <div class="bc-slides" id="bcSlides">
                 @foreach($homepageBanners as $index => $banner)

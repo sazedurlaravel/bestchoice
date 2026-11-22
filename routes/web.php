@@ -169,6 +169,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::put('/settings/courier/steadfast', [CourierController::class, 'update'])->name('settings.courier.steadfast.update');
         Route::post('/settings/courier/steadfast/test', [CourierController::class, 'test'])->middleware('throttle:6,1')->name('settings.courier.steadfast.test');
         Route::put('/settings/cod-review', [SettingsController::class, 'updateCodReview'])->name('settings.cod-review.update');
+        Route::put('/homepage/layout', [SettingsController::class, 'updateHomepageLayout'])->name('homepage.layout.update');
     });
     Route::middleware('permission:coupons.manage')->group(function (): void {
         Route::get('/coupons', [CouponController::class, 'index'])->name('coupons');
