@@ -4,7 +4,7 @@
 <div class="pagehead">
     <div><h1>ক্যাটাগরি এডিট করুন</h1><div class="sub"><a href="{{ route('admin.categories') }}">← ক্যাটাগরি তালিকায় ফিরুন</a></div></div>
 </div>
-<form method="POST" action="{{ route('admin.categories.update', $category) }}" style="max-width:600px">
+<form method="POST" action="{{ route('admin.categories.update', $category) }}" enctype="multipart/form-data" style="max-width:600px">
     @csrf @method('PUT')
     @include('admin.categories._form', ['model' => $category])
     <div class="form-actions">

@@ -4,7 +4,7 @@
 <div class="pagehead">
     <div><h1>নতুন ক্যাটাগরি</h1><div class="sub"><a href="{{ route('admin.categories') }}">← ক্যাটাগরি তালিকায় ফিরুন</a></div></div>
 </div>
-<form method="POST" action="{{ route('admin.categories.store') }}" style="max-width:600px">
+<form method="POST" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data" style="max-width:600px">
     @csrf
     @include('admin.categories._form')
     <div class="form-actions">

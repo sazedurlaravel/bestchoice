@@ -35,12 +35,18 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ]);
 
         $data['slug'] = Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
+
+        if ($request->hasFile('image_upload')) {
+            $data['image_path'] = '/storage/'.$request->file('image_upload')->store('categories', 'public');
+        }
+        unset($data['image_upload']);
 
         Category::create($data);
 
@@ -60,12 +66,18 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ]);
 
         $data['slug'] = Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
+
+        if ($request->hasFile('image_upload')) {
+            $data['image_path'] = '/storage/'.$request->file('image_upload')->store('categories', 'public');
+        }
+        unset($data['image_upload']);
 
         $category->update($data);
 

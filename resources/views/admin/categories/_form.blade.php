@@ -22,6 +22,16 @@
             <textarea name="description" class="form-input" rows="3">{{ old('description', $model->description ?? '') }}</textarea>
         </div>
         <div class="field">
+            <label>ক্যাটাগরি ছবি <small class="muted">(ঐচ্ছিক)</small></label>
+            <input type="file" name="image_upload" class="form-input" accept="image/jpeg,image/png,image/webp,image/avif">
+            @if(!empty($model?->image_path))
+                <img src="{{ $model->image_path }}" alt="{{ $model->name }}" style="width:96px;height:72px;object-fit:cover;border-radius:8px;margin-top:8px">
+                <small class="muted d-block">নতুন ছবি না দিলে বর্তমান ছবিটি থাকবে। সর্বোচ্চ 5 MB।</small>
+            @else
+                <small class="muted">ছবি না দিলেও ক্যাটাগরি সংরক্ষণ করা যাবে। সর্বোচ্চ 5 MB।</small>
+            @endif
+        </div>
+        <div class="field">
             <label>সর্ট অর্ডার <span class="req">*</span></label>
             <input type="number" name="sort_order" value="{{ old('sort_order', $model->sort_order ?? 0) }}" class="form-input" min="0" required>
         </div>
