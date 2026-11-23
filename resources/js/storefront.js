@@ -143,7 +143,10 @@ document.querySelectorAll('[data-variant-picker]').forEach((trigger) => trigger.
         variantPickerOptions.append(option);
     });
     const firstAvailable = variants.find((variant) => Number(variant.stock) > 0) || variants[0];
-    if (firstAvailable) updateVariantPickerPrice(firstAvailable);
+    if (firstAvailable) {
+        updateVariantPickerPrice(firstAvailable);
+        variantPickerOptions.querySelector(`[data-variant-id="${firstAvailable.id}"]`)?.click();
+    }
     variantPicker.hidden = false;
     variantPicker.setAttribute('aria-hidden', 'false');
     document.body.classList.add('variant-picker-open');

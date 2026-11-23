@@ -19,4 +19,34 @@
         <div class="full"><button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Homepage Layout</button></div>
     </form>
 </section>
+<section class="panel" style="max-width:680px;margin-top:18px">
+    <h2>Page Management</h2>
+    <p class="muted">Customize the content shown on the storefront About and Contact pages.</p>
+    <form method="POST" action="{{ route('admin.settings.pages.update') }}" class="formgrid">
+        @csrf @method('PUT')
+        <div class="full"><h3>About Page</h3></div>
+        <label>Page Kicker<input class="form-input" name="about_kicker" value="{{ old('about_kicker', $settings['about_kicker'] ?? 'BEST CHOICE ONLINE SHOPPING') }}" required></label>
+        <label class="full">Page Title<input class="form-input" name="about_title" value="{{ old('about_title', $settings['about_title'] ?? 'আপনার প্রতিদিনের কেনাকাটার নির্ভরযোগ্য ঠিকানা') }}" required></label>
+        <label class="full">Description<textarea class="form-input" name="about_description" rows="3" required>{{ old('about_description', $settings['about_description'] ?? ($settings['store_description'] ?? 'ফ্যাশন, ইলেকট্রনিক্স, হোম ও কিচেন, বিউটি এবং অ্যাকসেসরিজ—প্রয়োজনীয় পণ্য সহজে এবং নির্ভরতার সঙ্গে পৌঁছে দিতে আমরা কাজ করি।')) }}</textarea></label>
+        <label>Card 1 Title<input class="form-input" name="about_card_1_title" value="{{ old('about_card_1_title', $settings['about_card_1_title'] ?? 'সহজ কেনাকাটা') }}" required></label>
+        <label>Card 1 Text<textarea class="form-input" name="about_card_1_text" rows="2" required>{{ old('about_card_1_text', $settings['about_card_1_text'] ?? 'পছন্দের পণ্য খুঁজে দেখা, কার্টে যোগ করা এবং অর্ডার করা—সবকিছু সহজ ও পরিষ্কারভাবে সাজানো।') }}</textarea></label>
+        <label>Card 2 Title<input class="form-input" name="about_card_2_title" value="{{ old('about_card_2_title', $settings['about_card_2_title'] ?? 'বিশ্বাসযোগ্য সেবা') }}" required></label>
+        <label>Card 2 Text<textarea class="form-input" name="about_card_2_text" rows="2" required>{{ old('about_card_2_text', $settings['about_card_2_text'] ?? 'সঠিক পণ্যের তথ্য, স্বচ্ছ মূল্য এবং অর্ডারের প্রতিটি ধাপে সহযোগিতা দেওয়াই আমাদের লক্ষ্য।') }}</textarea></label>
+        <label>Card 3 Title<input class="form-input" name="about_card_3_title" value="{{ old('about_card_3_title', $settings['about_card_3_title'] ?? 'দেশজুড়ে ডেলিভারি') }}" required></label>
+        <label>Card 3 Text<textarea class="form-input" name="about_card_3_text" rows="2" required>{{ old('about_card_3_text', $settings['about_card_3_text'] ?? 'বাংলাদেশের বিভিন্ন প্রান্তে আপনার অর্ডার নিরাপদে পৌঁছে দেওয়ার জন্য আমরা কাজ করি।') }}</textarea></label>
+        <label>Callout Title<input class="form-input" name="about_callout_title" value="{{ old('about_callout_title', $settings['about_callout_title'] ?? 'কোনো প্রশ্ন আছে?') }}" required></label>
+        <label>Callout Text<textarea class="form-input" name="about_callout_text" rows="2" required>{{ old('about_callout_text', $settings['about_callout_text'] ?? 'আমাদের টিম আপনার পণ্য, অর্ডার বা ডেলিভারি সংক্রান্ত প্রশ্নে সাহায্য করতে প্রস্তুত।') }}</textarea></label>
+
+        <div class="full"><h3>Contact Page</h3></div>
+        <label>Page Kicker<input class="form-input" name="contact_kicker" value="{{ old('contact_kicker', $settings['contact_kicker'] ?? 'GET IN TOUCH') }}" required></label>
+        <label class="full">Page Title<input class="form-input" name="contact_title" value="{{ old('contact_title', $settings['contact_title'] ?? 'আমাদের সঙ্গে যোগাযোগ করুন') }}" required></label>
+        <label class="full">Description<textarea class="form-input" name="contact_description" rows="2" required>{{ old('contact_description', $settings['contact_description'] ?? 'পণ্য, অর্ডার বা ডেলিভারি বিষয়ে সহায়তার জন্য নিচের যেকোনো মাধ্যমে যোগাযোগ করুন।') }}</textarea></label>
+        <label>Phone Number<input class="form-input" type="tel" name="phone" value="{{ old('phone', $settings['phone'] ?? '') }}"></label>
+        <label>Email Address<input class="form-input" type="email" name="store_email" value="{{ old('store_email', $settings['store_email'] ?? '') }}"></label>
+        <label class="full">Address<textarea class="form-input" name="store_address" rows="2">{{ old('store_address', $settings['store_address'] ?? '') }}</textarea></label>
+        <label class="full">Help Section Title<input class="form-input" name="contact_help_title" value="{{ old('contact_help_title', $settings['contact_help_title'] ?? 'অর্ডার সংক্রান্ত সহায়তা') }}" required></label>
+        <label class="full">Help Section Text<textarea class="form-input" name="contact_help_text" rows="2" required>{{ old('contact_help_text', $settings['contact_help_text'] ?? 'অর্ডার নম্বর হাতে রাখলে আমাদের টিম দ্রুত সহায়তা করতে পারবে। আপনার অর্ডারের অবস্থা জানতে অর্ডার ট্র্যাকিং পেজ ব্যবহার করুন।') }}</textarea></label>
+        <div class="full"><button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Page Content</button></div>
+    </form>
+</section>
 @endsection

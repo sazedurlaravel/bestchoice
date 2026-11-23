@@ -8,6 +8,10 @@
         <div class="sub">Total {{ $products->total() }} products</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <form id="bulk-product-form" method="POST" action="{{ route('admin.products.bulk-delete') }}" onsubmit="return confirmBulkProductDelete()">
+            @csrf
+            <button class="btn secondary" type="submit"><i class="fa-solid fa-trash"></i> Delete Selected</button>
+        </form>
         <a class="btn secondary" href="{{ route('admin.products.export') }}"><i class="fa-solid fa-download"></i> CSV Export</a>
         <a class="btn" href="{{ route('admin.products.create') }}"><i class="fa-solid fa-plus"></i> Add New Product</a>
     </div>
@@ -57,6 +61,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th><input type="checkbox" data-select-all="product"></th>
                     <th>Product Image</th>
                     <th>Name / SKU</th>
                     <th>Category</th>
@@ -69,6 +74,7 @@
             <tbody>
                 @forelse($products as $product)
                     <tr>
+                        <td><input type="checkbox" name="product_ids[]" value="{{ $product->id }}" form="bulk-product-form" data-row-select="product"></td>
                         <td><img src="{{ $product->display_image }}" alt="{{ $product->name }}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid #e5e9e6"></td>
                         <td>
                             <b>{{ $product->name }}</b><br>
@@ -110,7 +116,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="empty">No products found.</td></tr>
+                    <tr><td colspan="8" class="empty">No products found.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -119,4 +125,19 @@
         <div style="padding:16px 20px">{{ $products->links() }}</div>
     @endif
 </section>
+<script>
+    function confirmBulkProductDelete() {
+        const selected = document.querySelectorAll('[data-row-select="product"]:checked');
+        if (!selected.length) {
+            alert('Select at least one product.');
+            return false;
+        }
+
+        return confirm(`Delete ${selected.length} selected product(s)? This action cannot be undone.`);
+    }
+
+    document.querySelector('[data-select-all="product"]')?.addEventListener('change', (event) => {
+        document.querySelectorAll('[data-row-select="product"]').forEach((checkbox) => { checkbox.checked = event.target.checked; });
+    });
+</script>
 @endsection

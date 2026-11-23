@@ -386,6 +386,48 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        $this->deleteProduct($product);
+
+        return redirect()->route('admin.products')->with('success', 'পণ্য এবং এর সংশ্লিষ্ট রেকর্ড স্থায়ীভাবে মুছে ফেলা হয়েছে।');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'product_ids' => ['required', 'array', 'min:1'],
+            'product_ids.*' => ['integer', 'distinct', 'exists:products,id'],
+        ]);
+
+        $deleted = 0;
+        $failed = [];
+
+        foreach ($data['product_ids'] as $productId) {
+            $product = Product::query()->find($productId);
+            if (! $product) {
+                continue;
+            }
+
+            try {
+                $this->deleteProduct($product);
+                $deleted++;
+            } catch (ValidationException $exception) {
+                $failed[] = $product->name.': '.(collect($exception->errors())->flatten()->first() ?? 'পণ্যটি মুছে ফেলা যায়নি।');
+            } catch (\Throwable $exception) {
+                report($exception);
+                $failed[] = $product->name.': পণ্যটি মুছে ফেলা যায়নি।';
+            }
+        }
+
+        $message = $deleted.'টি পণ্য মুছে ফেলা হয়েছে।';
+        if ($failed) {
+            $message .= ' বাদ গেছে: '.implode(' | ', $failed);
+        }
+
+        return redirect()->route('admin.products')->with($deleted > 0 ? 'success' : 'error', $message);
+    }
+
+    private function deleteProduct(Product $product): void
+    {
         DB::transaction(function () use ($product): void {
             $lockedProduct = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
             $orderItemIds = OrderItem::query()
@@ -403,8 +445,6 @@ class ProductController extends Controller
             DB::table('product_variants')->where('product_id', $lockedProduct->id)->delete();
             DB::table('products')->where('id', $lockedProduct->id)->delete();
         }, 3);
-
-        return redirect()->route('admin.products')->with('success', 'পণ্য এবং এর সংশ্লিষ্ট রেকর্ড স্থায়ীভাবে মুছে ফেলা হয়েছে।');
     }
 
     private function sanitizeProductDescription(?string $description): ?string

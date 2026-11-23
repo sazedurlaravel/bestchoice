@@ -86,6 +86,37 @@ class SettingsController extends Controller
         return back()->with('success', 'Header and footer settings updated.');
     }
 
+    public function updatePageContent(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'about_kicker' => ['required', 'string', 'max:100'],
+            'about_title' => ['required', 'string', 'max:255'],
+            'about_description' => ['required', 'string', 'max:1000'],
+            'about_card_1_title' => ['required', 'string', 'max:120'],
+            'about_card_1_text' => ['required', 'string', 'max:500'],
+            'about_card_2_title' => ['required', 'string', 'max:120'],
+            'about_card_2_text' => ['required', 'string', 'max:500'],
+            'about_card_3_title' => ['required', 'string', 'max:120'],
+            'about_card_3_text' => ['required', 'string', 'max:500'],
+            'about_callout_title' => ['required', 'string', 'max:255'],
+            'about_callout_text' => ['required', 'string', 'max:500'],
+            'contact_kicker' => ['required', 'string', 'max:100'],
+            'contact_title' => ['required', 'string', 'max:255'],
+            'contact_description' => ['required', 'string', 'max:500'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'store_email' => ['nullable', 'email', 'max:255'],
+            'store_address' => ['nullable', 'string', 'max:255'],
+            'contact_help_title' => ['required', 'string', 'max:255'],
+            'contact_help_text' => ['required', 'string', 'max:500'],
+        ]);
+
+        foreach ($data as $key => $value) {
+            StoreSetting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
+
+        return back()->with('success', 'About and Contact page settings updated.');
+    }
+
     public function updateCodReview(Request $request): RedirectResponse
     {
         $data = $request->validate([

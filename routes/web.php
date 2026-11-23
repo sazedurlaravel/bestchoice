@@ -108,6 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/products', [AdminProductController::class, 'index'])->name('products');
         Route::get('/products/export', [AdminProductController::class, 'export'])->name('products.export');
         Route::post('/products/import', [AdminProductController::class, 'import'])->name('products.import');
+        Route::post('/products/bulk-delete', [AdminProductController::class, 'bulkDestroy'])->name('products.bulk-delete');
         Route::get('/products/create', [AdminProductController::class, 'create'])->name('products.create');
         Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
         Route::get('/products/{product}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
@@ -122,6 +123,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
         Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
         Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::post('/categories/bulk-delete', [AdminCategoryController::class, 'bulkDestroy'])->name('categories.bulk-delete');
         Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
@@ -171,6 +173,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
         Route::put('/settings/theme', [SettingsController::class, 'updateTheme'])->name('settings.theme.update');
+        Route::put('/settings/pages', [SettingsController::class, 'updatePageContent'])->name('settings.pages.update');
         Route::delete('/settings/theme', [SettingsController::class, 'resetTheme'])->name('settings.theme.reset');
         Route::get('/settings/courier/steadfast', [CourierController::class, 'edit'])->name('settings.courier.steadfast');
         Route::put('/settings/courier/steadfast', [CourierController::class, 'update'])->name('settings.courier.steadfast.update');

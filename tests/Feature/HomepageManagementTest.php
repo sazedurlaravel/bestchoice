@@ -153,4 +153,37 @@ class HomepageManagementTest extends TestCase
             ->assertSee('--theme-header-background:#f0eadf', false)
             ->assertSee('--theme-footer-background:#102f25', false);
     }
+
+    public function test_admin_can_manage_about_and_contact_page_content(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->put(route('admin.settings.pages.update'), [
+                'about_kicker' => 'ABOUT OUR STORE',
+                'about_title' => 'Shopping made simple',
+                'about_description' => 'A better way to shop online.',
+                'about_card_1_title' => 'Easy shopping',
+                'about_card_1_text' => 'Find what you need quickly.',
+                'about_card_2_title' => 'Trusted service',
+                'about_card_2_text' => 'We support every order.',
+                'about_card_3_title' => 'Fast delivery',
+                'about_card_3_text' => 'We deliver across Bangladesh.',
+                'about_callout_title' => 'Need help?',
+                'about_callout_text' => 'Our team is ready to help.',
+                'contact_kicker' => 'CONTACT US',
+                'contact_title' => 'Talk to our team',
+                'contact_description' => 'We are here for your questions.',
+                'phone' => '01700000000',
+                'store_email' => 'support@example.com',
+                'store_address' => 'Dhaka, Bangladesh',
+                'contact_help_title' => 'Order support',
+                'contact_help_text' => 'Keep your order number ready.',
+            ])
+            ->assertRedirect()
+            ->assertSessionHas('success', 'About and Contact page settings updated.');
+
+        $this->get(route('about'))->assertOk()->assertSee('Shopping made simple')->assertSee('Trusted service');
+        $this->get(route('contact'))->assertOk()->assertSee('Talk to our team')->assertSee('Order support')->assertSee('01700000000')->assertSee('support@example.com')->assertSee('Dhaka, Bangladesh');
+    }
 }

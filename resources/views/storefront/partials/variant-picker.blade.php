@@ -6,7 +6,7 @@
             <div class="variant-picker-price" id="variantPickerPrice">৳0</div>
             <del class="variant-picker-regular-price" id="variantPickerRegularPrice" hidden>৳0</del>
         </div>
-        <h2 id="variantPickerTitle">Size</h2>
+        <h2 id="variantPickerTitle">সাইজ নির্বাচন করুন</h2>
         <div class="variant-picker-options" id="variantPickerOptions"></div>
         <p class="variant-picker-error" id="variantPickerError" role="alert" hidden>একটি ভ্যারিয়েন্ট বেছে নিন।</p>
         <form method="POST" action="{{ route('cart.add') }}" class="variant-picker-form" id="variantPickerForm">

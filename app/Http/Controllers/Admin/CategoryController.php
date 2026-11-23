@@ -82,4 +82,33 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories')->with('success', 'ক্যাটাগরি মুছে ফেলা হয়েছে।');
     }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'category_ids' => ['required', 'array', 'min:1'],
+            'category_ids.*' => ['integer', 'distinct', 'exists:categories,id'],
+        ]);
+
+        $deleted = 0;
+        $failed = [];
+
+        foreach (Category::query()->whereIn('id', $data['category_ids'])->get() as $category) {
+            if ($category->products()->exists()) {
+                $failed[] = $category->name.': এই ক্যাটাগরিতে পণ্য আছে।';
+
+                continue;
+            }
+
+            $category->delete();
+            $deleted++;
+        }
+
+        $message = $deleted.'টি ক্যাটাগরি মুছে ফেলা হয়েছে।';
+        if ($failed) {
+            $message .= ' বাদ গেছে: '.implode(' | ', $failed);
+        }
+
+        return redirect()->route('admin.categories')->with($deleted > 0 ? 'success' : 'error', $message);
+    }
 }

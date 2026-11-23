@@ -107,6 +107,7 @@
                                     <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Header &amp; Footer</p></a></li>
                                     <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Homepage Layout</p></a></li>
                                     <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Theme Colors</p></a></li>
+                                    <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>About &amp; Contact Pages</p></a></li>
                                     <li class="nav-item"><a href="{{ route('admin.settings') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>COD Review</p></a></li>
                                     <li class="nav-item"><a href="{{ route('admin.settings.courier.steadfast') }}" class="nav-link @if(request()->routeIs('admin.settings.courier.steadfast*')) active @endif"><i class="far fa-circle nav-icon"></i><p>Steadfast Courier</p></a></li>
                                 @endif
