@@ -7,7 +7,6 @@ use App\Models\StoreSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -111,7 +110,7 @@ class SettingsController extends Controller
 
             StoreSetting::updateOrCreate(
                 ['key' => $settingKey],
-                ['value' => Storage::disk('public')->url($request->file($uploadField)->store('branding', 'public'))],
+                ['value' => '/storage/'.$request->file($uploadField)->store('branding', 'public')],
             );
         }
 
@@ -120,7 +119,7 @@ class SettingsController extends Controller
 
             StoreSetting::updateOrCreate(
                 ['key' => 'favicon_url'],
-                ['value' => Storage::disk('public')->url($path)],
+                ['value' => '/storage/'.$path],
             );
         }
 

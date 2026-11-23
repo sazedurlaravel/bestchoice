@@ -168,8 +168,9 @@ class HomepageManagementTest extends TestCase
             ->assertRedirect()
             ->assertSessionHas('success', 'Brand logo updated.');
 
-        $this->assertStringContainsString('/storage/branding/', StoreSetting::query()->where('key', 'header_logo_url')->value('value'));
-        $this->assertStringContainsString('/storage/branding/', StoreSetting::query()->where('key', 'footer_logo_url')->value('value'));
+        $this->assertStringStartsWith('/storage/branding/', (string) StoreSetting::query()->where('key', 'header_logo_url')->value('value'));
+        $this->assertStringNotContainsString('localhost', (string) StoreSetting::query()->where('key', 'header_logo_url')->value('value'));
+        $this->assertStringNotContainsString('localhost', (string) StoreSetting::query()->where('key', 'footer_logo_url')->value('value'));
         $this->assertDatabaseHas('store_settings', ['key' => 'favicon_url']);
         $this->assertCount(3, Storage::disk('public')->allFiles('branding'));
 

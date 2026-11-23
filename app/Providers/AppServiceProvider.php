@@ -38,6 +38,14 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.storefront', function ($view): void {
             $wishlistIds = array_map('intval', session('wishlist', []));
             $storeSettings = StoreSetting::query()->pluck('value', 'key')->all();
+            foreach (['brand_logo_url', 'header_logo_url', 'footer_logo_url', 'favicon_url'] as $brandingKey) {
+                $brandingUrl = $storeSettings[$brandingKey] ?? null;
+                $brandingHost = $brandingUrl ? parse_url($brandingUrl, PHP_URL_HOST) : null;
+
+                if (in_array($brandingHost, ['localhost', '127.0.0.1'], true)) {
+                    $storeSettings[$brandingKey] = parse_url($brandingUrl, PHP_URL_PATH) ?: $brandingUrl;
+                }
+            }
             $cart = app(CartService::class);
             $cartItems = $cart->items();
             $cartSubtotal = array_reduce($cartItems, function (float $subtotal, array $item): float {
