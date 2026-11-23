@@ -32,6 +32,11 @@
                 icon: flash.type,
                 title: flash.type === 'success' ? 'Success' : flash.type === 'error' ? 'Error' : 'Notice',
                 text: message,
+                toast: true,
+                position: 'top-end',
+                timer: 3500,
+                timerProgressBar: true,
+                showConfirmButton: false,
                 confirmButtonColor: flash.type === 'success' ? '#164c39' : '#d9903b',
             });
         }
