@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
+        View::composer('layouts.admin', function ($view): void {
+            $view->with('faviconUrl', StoreSetting::query()->where('key', 'favicon_url')->value('value'));
+        });
+
         View::composer('layouts.storefront', function ($view): void {
             $view->with('themeSettings', StoreSetting::query()
                 ->whereIn('key', [

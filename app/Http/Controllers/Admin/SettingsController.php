@@ -7,6 +7,7 @@ use App\Models\StoreSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -60,6 +61,10 @@ class SettingsController extends Controller
                 'footer_background_color',
                 'header_logo_text',
                 'header_subtitle',
+                'brand_logo_url',
+                'header_logo_url',
+                'footer_logo_url',
+                'favicon_url',
                 'footer_description',
                 'footer_copyright_text',
             ])
@@ -84,6 +89,42 @@ class SettingsController extends Controller
         }
 
         return back()->with('success', 'Header and footer settings updated.');
+    }
+
+    public function updateBranding(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'brand_logo_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
+            'header_logo_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
+            'footer_logo_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
+            'favicon_upload' => ['nullable', 'file', 'mimes:ico,png,jpg,jpeg,webp', 'max:2048'],
+        ]);
+
+        foreach ([
+            'header_logo_upload' => 'header_logo_url',
+            'footer_logo_upload' => 'footer_logo_url',
+            'brand_logo_upload' => 'brand_logo_url',
+        ] as $uploadField => $settingKey) {
+            if (! $request->hasFile($uploadField)) {
+                continue;
+            }
+
+            StoreSetting::updateOrCreate(
+                ['key' => $settingKey],
+                ['value' => Storage::disk('public')->url($request->file($uploadField)->store('branding', 'public'))],
+            );
+        }
+
+        if ($request->hasFile('favicon_upload')) {
+            $path = $request->file('favicon_upload')->store('branding', 'public');
+
+            StoreSetting::updateOrCreate(
+                ['key' => 'favicon_url'],
+                ['value' => Storage::disk('public')->url($path)],
+            );
+        }
+
+        return back()->with('success', 'Brand logo updated.');
     }
 
     public function updatePageContent(Request $request): RedirectResponse

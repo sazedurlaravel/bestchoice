@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? $storeName }}</title>
+    @if(!empty($storeSettings['favicon_url']))<link rel="icon" href="{{ $storeSettings['favicon_url'] }}">@endif
     @php
         $themePrimary = $themeSettings['theme_primary_color'] ?? '#164c39';
         $themeAccent = $themeSettings['theme_accent_color'] ?? '#d9903b';

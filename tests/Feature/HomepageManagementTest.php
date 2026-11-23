@@ -154,6 +154,28 @@ class HomepageManagementTest extends TestCase
             ->assertSee('--theme-footer-background:#102f25', false);
     }
 
+    public function test_admin_can_upload_a_shared_storefront_brand_logo(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->put(route('admin.settings.branding.update'), [
+                'header_logo_upload' => UploadedFile::fake()->image('header-logo.png'),
+                'footer_logo_upload' => UploadedFile::fake()->image('footer-logo.png'),
+                'favicon_upload' => UploadedFile::fake()->image('favicon.png'),
+            ])
+            ->assertRedirect()
+            ->assertSessionHas('success', 'Brand logo updated.');
+
+        $this->assertStringContainsString('/storage/branding/', StoreSetting::query()->where('key', 'header_logo_url')->value('value'));
+        $this->assertStringContainsString('/storage/branding/', StoreSetting::query()->where('key', 'footer_logo_url')->value('value'));
+        $this->assertDatabaseHas('store_settings', ['key' => 'favicon_url']);
+        $this->assertCount(3, Storage::disk('public')->allFiles('branding'));
+
+        $this->get(route('home'))->assertOk()->assertSee('class="brand-logo-image"', false)->assertSee('class="footer-brand-logo"', false);
+    }
+
     public function test_admin_can_manage_about_and_contact_page_content(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

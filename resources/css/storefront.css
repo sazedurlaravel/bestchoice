@@ -48,6 +48,8 @@
 .brand-title{font-family:Arial,sans-serif;font-size:23px;font-weight:800;letter-spacing:-1px;color:#164c39;white-space:nowrap}
 .brand-title em{font-style:normal;color:#d9903b}
 .logo .logo-sub{display:block;margin:0;font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:2.1px;color:#65796c;line-height:1.2}
+.brand-logo-image{display:block;width:auto;max-width:180px;height:42px;object-fit:contain}
+.footer-brand-logo{display:block;width:auto;max-width:220px;height:56px;object-fit:contain;margin-bottom:14px}
 @media(max-width:767px){
  .header{border-bottom:1px solid #e8ece6}
  .headrow{min-height:76px;padding-top:13px;padding-bottom:13px;gap:6px}

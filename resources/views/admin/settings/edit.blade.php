@@ -49,4 +49,25 @@
         <div class="full"><button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Page Content</button></div>
     </form>
 </section>
+
+<section class="panel" style="max-width:680px;margin-top:18px">
+    <h2>Brand Logo</h2>
+    <p class="muted">Upload separate logos for the storefront header and footer. If a logo is not uploaded, the configured brand text will be shown instead. You can also set the browser tab favicon here.</p>
+    <form method="POST" action="{{ route('admin.settings.branding.update') }}" enctype="multipart/form-data" class="formgrid">
+        @csrf @method('PUT')
+        <label class="full">Header Logo Image<input class="form-input" type="file" name="header_logo_upload" accept="image/jpeg,image/png,image/webp,image/avif"></label>
+        <label class="full">Footer Logo Image<input class="form-input" type="file" name="footer_logo_upload" accept="image/jpeg,image/png,image/webp,image/avif"></label>
+        <label class="full">Favicon Image<input class="form-input" type="file" name="favicon_upload" accept="image/x-icon,image/png,image/jpeg,image/webp"></label>
+        @if(!empty($settings['header_logo_url']))
+            <div class="full"><img src="{{ $settings['header_logo_url'] }}" alt="Current header logo" style="max-width:220px;max-height:90px;object-fit:contain;background:#f5f7f4;padding:10px;border-radius:8px"></div>
+        @endif
+        @if(!empty($settings['footer_logo_url']))
+            <div class="full"><img src="{{ $settings['footer_logo_url'] }}" alt="Current footer logo" style="max-width:220px;max-height:90px;object-fit:contain;background:#f5f7f4;padding:10px;border-radius:8px"></div>
+        @endif
+        @if(!empty($settings['favicon_url']))
+            <div class="full"><img src="{{ $settings['favicon_url'] }}" alt="Current favicon" style="width:48px;height:48px;object-fit:contain;background:#f5f7f4;padding:6px;border-radius:8px"></div>
+        @endif
+        <div class="full"><button class="btn" type="submit"><i class="fa-solid fa-upload"></i> Save Header, Footer &amp; Favicon</button></div>
+    </form>
+</section>
 @endsection

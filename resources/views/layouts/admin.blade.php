@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if(!empty($faviconUrl))<link rel="icon" href="{{ $faviconUrl }}">@endif
     @php
         $adminTranslations = [
             'অ্যাডমিন প্যানেল' => 'Admin Panel', 'ড্যাশবোর্ড' => 'Dashboard', 'স্টোর দেখুন' => 'View Store', 'স্টোর' => 'Store', 'লগআউট' => 'Log out', 'স্টোর ম্যানেজার' => 'Store Manager',

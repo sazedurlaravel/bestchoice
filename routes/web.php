@@ -173,6 +173,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
         Route::put('/settings/theme', [SettingsController::class, 'updateTheme'])->name('settings.theme.update');
+        Route::put('/settings/branding', [SettingsController::class, 'updateBranding'])->name('settings.branding.update');
         Route::put('/settings/pages', [SettingsController::class, 'updatePageContent'])->name('settings.pages.update');
         Route::delete('/settings/theme', [SettingsController::class, 'resetTheme'])->name('settings.theme.reset');
         Route::get('/settings/courier/steadfast', [CourierController::class, 'edit'])->name('settings.courier.steadfast');
