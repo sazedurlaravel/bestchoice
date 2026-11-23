@@ -64,12 +64,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/admin.css', 'resources/css/admin-overrides.css', 'resources/js/admin.js'])
 </head>
-<body class="hold-transition sidebar-mini layout-fixed accent-success">
-<script>
-    if (window.matchMedia('(min-width: 992px)').matches) {
-        document.body.classList.add('sidebar-collapse');
-    }
-</script>
+<body class="hold-transition sidebar-mini sidebar-collapse layout-fixed accent-success">
 <div class="wrapper">
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <ul class="navbar-nav">

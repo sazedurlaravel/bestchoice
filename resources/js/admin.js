@@ -7,6 +7,17 @@ window.Popper = Popper;
 await import('bootstrap');
 await import('admin-lte');
 
+const closeSidebarOnInitialLoad = () => {
+    document.body.classList.add('sidebar-collapse');
+    document.body.classList.remove('sidebar-open');
+
+    if (window.innerWidth <= 992) {
+        document.body.classList.add('sidebar-closed');
+    }
+};
+
+window.addEventListener('load', closeSidebarOnInitialLoad, { once: true });
+
 document.addEventListener('click', (event) => {
     const removeButton = event.target.closest('[data-remove-main-image]');
     if (!removeButton) return;
