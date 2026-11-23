@@ -14,6 +14,15 @@ class ProductImage extends Model
 
     protected $fillable = ['product_id', 'image_path', 'alt_text', 'sort_order'];
 
+    public function getImagePathAttribute(?string $value): ?string
+    {
+        $host = $value ? parse_url($value, PHP_URL_HOST) : null;
+
+        return in_array($host, ['localhost', '127.0.0.1'], true)
+            ? (parse_url($value, PHP_URL_PATH) ?: $value)
+            : $value;
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

@@ -77,7 +77,14 @@ class Product extends Model
 
     public function getDisplayImageAttribute(): string
     {
-        return $this->main_image ?: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&auto=format&fit=crop';
+        $image = $this->main_image;
+        $host = $image ? parse_url($image, PHP_URL_HOST) : null;
+
+        if (in_array($host, ['localhost', '127.0.0.1'], true)) {
+            $image = parse_url($image, PHP_URL_PATH) ?: $image;
+        }
+
+        return $image ?: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&auto=format&fit=crop';
     }
 
     public function getFormattedSellingPriceAttribute(): string

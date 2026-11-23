@@ -12,7 +12,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -176,7 +175,7 @@ class ProductController extends Controller
         $mainImageUpload = $request->file('main_image_upload');
         unset($data['main_image_upload']);
         if ($mainImageUpload) {
-            $data['main_image'] = Storage::disk('public')->url($mainImageUpload->store('products', 'public'));
+            $data['main_image'] = '/storage/'.$mainImageUpload->store('products', 'public');
         }
         $galleryImages = array_values(array_filter($data['gallery_images'] ?? [], fn (array $image): bool => filled($image['url'] ?? null)));
         $galleryUploads = $request->file('gallery_uploads', []);
@@ -214,7 +213,7 @@ class ProductController extends Controller
                 $product->images()->create(['image_path' => $image['url'], 'alt_text' => $image['alt_text'] ?? null, 'sort_order' => $sortOrder++]);
             }
             foreach ($galleryUploads as $upload) {
-                $product->images()->create(['image_path' => Storage::disk('public')->url($upload->store('products', 'public')), 'alt_text' => null, 'sort_order' => $sortOrder++]);
+                $product->images()->create(['image_path' => '/storage/'.$upload->store('products', 'public'), 'alt_text' => null, 'sort_order' => $sortOrder++]);
             }
             $this->inventory->setStock($product, $stock, 'পণ্যের প্রারম্ভিক স্টক', $request->user()->id, null, $operationKey, 0);
             foreach ($variants as $variantData) {
@@ -286,7 +285,7 @@ class ProductController extends Controller
         unset($data['main_image_upload']);
         unset($data['remove_main_image']);
         if ($mainImageUpload) {
-            $data['main_image'] = Storage::disk('public')->url($mainImageUpload->store('products', 'public'));
+            $data['main_image'] = '/storage/'.$mainImageUpload->store('products', 'public');
         } elseif ($removeMainImage && blank($data['main_image'] ?? null)) {
             $data['main_image'] = null;
         }
@@ -352,7 +351,7 @@ class ProductController extends Controller
                 $lockedProduct->images()->create(['image_path' => $image['url'], 'alt_text' => $image['alt_text'] ?? null, 'sort_order' => $nextSortOrder + $offset++]);
             }
             foreach ($galleryUploads as $upload) {
-                $lockedProduct->images()->create(['image_path' => Storage::disk('public')->url($upload->store('products', 'public')), 'alt_text' => null, 'sort_order' => $nextSortOrder + $offset++]);
+                $lockedProduct->images()->create(['image_path' => '/storage/'.$upload->store('products', 'public'), 'alt_text' => null, 'sort_order' => $nextSortOrder + $offset++]);
             }
             $this->inventory->setStock($lockedProduct, $stock, 'পণ্য ফর্মে স্টক সমন্বয়', $request->user()->id, null, $operationKey, $expectedStock);
 
