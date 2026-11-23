@@ -35,6 +35,7 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
+            'image_url' => ['nullable', 'url', 'max:2048'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
@@ -45,8 +46,10 @@ class CategoryController extends Controller
 
         if ($request->hasFile('image_upload')) {
             $data['image_path'] = '/storage/'.$request->file('image_upload')->store('categories', 'public');
+        } elseif ($request->filled('image_url')) {
+            $data['image_path'] = $data['image_url'];
         }
-        unset($data['image_upload']);
+        unset($data['image_upload'], $data['image_url']);
 
         Category::create($data);
 
@@ -66,6 +69,7 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
+            'image_url' => ['nullable', 'url', 'max:2048'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
@@ -76,8 +80,10 @@ class CategoryController extends Controller
 
         if ($request->hasFile('image_upload')) {
             $data['image_path'] = '/storage/'.$request->file('image_upload')->store('categories', 'public');
+        } elseif ($request->filled('image_url')) {
+            $data['image_path'] = $data['image_url'];
         }
-        unset($data['image_upload']);
+        unset($data['image_upload'], $data['image_url']);
 
         $category->update($data);
 

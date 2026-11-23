@@ -23,6 +23,8 @@
         </div>
         <div class="field">
             <label>ক্যাটাগরি ছবি <small class="muted">(ঐচ্ছিক)</small></label>
+            <input type="url" name="image_url" value="{{ old('image_url', (!empty($model?->image_path) && !str_starts_with($model->image_path, '/storage/')) ? $model->image_path : '') }}" class="form-input" placeholder="https://example.com/category.jpg">
+            <small class="muted">অথবা নিচে ছবি আপলোড করুন। আপলোড করা ছবি URL-এর উপর অগ্রাধিকার পাবে।</small>
             <input type="file" name="image_upload" class="form-input" accept="image/jpeg,image/png,image/webp,image/avif">
             @if(!empty($model?->image_path))
                 <img src="{{ $model->image_path }}" alt="{{ $model->name }}" style="width:96px;height:72px;object-fit:cover;border-radius:8px;margin-top:8px">

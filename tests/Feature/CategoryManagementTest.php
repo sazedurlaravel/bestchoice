@@ -40,5 +40,19 @@ class CategoryManagementTest extends TestCase
         $category = Category::query()->where('name', 'With Image')->firstOrFail();
         $this->assertStringStartsWith('/storage/categories/', $category->image_path);
         $this->assertCount(1, Storage::disk('public')->allFiles('categories'));
+
+        $this->actingAs($admin)
+            ->post(route('admin.categories.store'), [
+                'name' => 'URL Image',
+                'sort_order' => 3,
+                'is_active' => 1,
+                'image_url' => 'https://example.com/category.jpg',
+            ])
+            ->assertRedirect(route('admin.categories'));
+
+        $this->assertDatabaseHas('categories', [
+            'name' => 'URL Image',
+            'image_path' => 'https://example.com/category.jpg',
+        ]);
     }
 }
