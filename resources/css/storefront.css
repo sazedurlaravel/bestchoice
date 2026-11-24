@@ -815,7 +815,7 @@ body{font-family:'Hind Siliguri','Noto Sans Bengali','SolaimanLipi',sans-serif}
 .products .product-actions .bc-buy-now{width:100%;min-width:0;overflow:visible;text-overflow:clip;white-space:nowrap}
 .products .product-actions .wish-button{width:42px;min-width:42px;flex:0 0 42px;min-height:42px;padding:0;display:grid;place-items:center}
 @media(min-width:901px){
-  .products,.new-home .products,.bestsellers-section .products,.shop-products .products,.shop-products.list-view .products{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .products,.new-home .products,.bestsellers-section .products,.shop-products .products,.shop-products.list-view .products{grid-template-columns:repeat(5,minmax(0,1fr))!important}
 }
 @media(max-width:650px){
   .products .product-actions .card-cart-form{display:flex;flex:1 1 auto}
@@ -913,8 +913,8 @@ body.cart-drawer-open{overflow:hidden}
 body{background-color:var(--theme-background,#faf8f1)!important}
 .header{background-color:var(--theme-header-background,#fff)!important}
 .footer{background-color:var(--theme-footer-background,#153f30)!important}
-.new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-desktop,4),minmax(0,1fr))!important}
-@media(max-width:650px){.new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-mobile,2),minmax(0,1fr))!important}}
+.new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-desktop,5),minmax(0,1fr))!important}
+@media(max-width:650px){.new-home .bestsellers-section .products{grid-template-columns:repeat(var(--home-products-mobile,3),minmax(0,1fr))!important}}
 
 /* Product detail purchase panel: compact reference layout in the configured theme palette. */
 .detail-buy-panel{padding:0 8px}.detail-category{display:none}.detail-buy-panel h1{margin:0 0 18px;font-size:clamp(30px,3.6vw,48px);line-height:1.12;letter-spacing:-.035em;color:var(--green)}.detail-price-line{border:0;padding:0 0 22px;gap:10px}.detail-price-line strong{font-size:36px;color:var(--green)}.detail-price-line del{font-size:17px}.variant-block{padding:12px 0 18px;border:0}.variant-label{justify-content:flex-start;margin-bottom:12px}.variant-label b{font-size:21px;color:var(--green)}.variant-label span{display:none}.variant-colors,.variant-sizes{gap:10px}.size-option,.color-option{border:2px solid color-mix(in srgb,var(--green) 25%,#fff);border-radius:0;background:#fff;color:var(--green);min-width:58px;min-height:48px;font-size:19px}.color-option{border-radius:6px}.color-option.selected,.size-option.selected{border-color:var(--green);background:var(--green);color:#fff}.detail-stock-row{padding:5px 0 12px}.detail-quantity-line{margin:8px 0 17px}.detail-qty{border:1px solid color-mix(in srgb,var(--green) 22%,#fff);border-radius:10px;overflow:hidden}.detail-qty button{background:#fff;color:var(--green);height:48px}.detail-qty span{min-width:48px}.detail-buttons{grid-template-columns:1fr;gap:10px}.detail-buttons button{min-height:58px;border-radius:999px;font-size:18px}.detail-buttons .detail-buy{order:-1;background:var(--green);border-color:var(--green);color:#fff}.detail-buttons .detail-add{background:var(--theme-accent,#d9903b);border-color:var(--theme-accent,#d9903b);color:#fff}.detail-contact-actions{display:grid;gap:10px;margin-top:18px}.detail-contact-actions a{display:flex;align-items:center;justify-content:center;gap:12px;min-height:58px;border-radius:999px;color:#fff;font-size:20px;font-weight:800;text-decoration:none}.detail-contact-actions a:first-child{background:#1589d1}.detail-contact-actions a:last-child{background:#28b956}.detail-wishlist{margin-top:14px}.detail-buy-panel .detail-benefits{margin-top:14px}@media(max-width:700px){.detail-buy-panel{padding:0}.detail-buy-panel h1{font-size:31px}.detail-price-line strong{font-size:32px}.detail-buttons button,.detail-contact-actions a{font-size:17px}}
@@ -948,6 +948,9 @@ body{background-color:var(--theme-background,#faf8f1)!important}
 
 /* Use the approved Best Choice green and gold palette for the popup accents. */
 .variant-picker-close{background:var(--green);color:#fff}
+
+/* Shared keyboard focus treatment keeps controls visible without changing the approved palette. */
+:is(a,button,input,select,textarea):focus-visible{outline:3px solid var(--theme-accent,#d9903b);outline-offset:3px}
 .variant-picker-price{color:var(--green)}
 .variant-picker-price-row{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:0 0 30px}
 .variant-picker-price-row .variant-picker-price{margin:0}

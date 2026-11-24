@@ -31,7 +31,7 @@
             @if(count($collection['items']) > 0)
                 <section class="bc-collection">
                     <div class="bc-collection-title">
-                        <h2>✦ {{ $collection['title'] }} ✦</h2>
+                        <h2>{{ $collection['title'] }}</h2>
                         <small>{{ $homepageContent['collectionSubtitle'] }}</small>
                     </div>
                     <div class="bc-collection-grid">

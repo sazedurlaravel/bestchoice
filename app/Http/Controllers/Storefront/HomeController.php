@@ -15,8 +15,8 @@ class HomeController extends Controller
     {
         $settings = StoreSetting::query()->pluck('value', 'key');
         $collectionCategoryLimit = min(24, max(1, (int) ($settings['home_collection_category_limit'] ?? 8)));
-        $productColumnsDesktop = min(8, max(1, (int) ($settings['home_product_columns_desktop'] ?? 4)));
-        $productColumnsMobile = min(4, max(1, (int) ($settings['home_product_columns_mobile'] ?? 2)));
+        $productColumnsDesktop = min(8, max(1, (int) ($settings['home_product_columns_desktop'] ?? 5)));
+        $productColumnsMobile = min(4, max(1, (int) ($settings['home_product_columns_mobile'] ?? 3)));
         $categories = Category::query()->active()->topLevel()->with(['children' => fn ($query) => $query->active()->withCount(['products' => fn ($products) => $products->active()])])->orderBy('sort_order')->get();
         $categoryIndexes = $categories->pluck('id')->flip();
         $frontendCategories = $categories->map(fn (Category $category): array => [$category->name, $category->image_path])->values()->all();

@@ -14,8 +14,8 @@
     <form method="POST" action="{{ route('admin.homepage.layout.update') }}" class="formgrid">
         @csrf @method('PUT')
         <label>Categories under each main category<input class="form-input" type="number" min="1" max="24" name="home_collection_category_limit" value="{{ old('home_collection_category_limit', $settings['home_collection_category_limit'] ?? 8) }}" required><small class="muted">Maximum subcategories shown in each homepage category section.</small></label>
-        <label>Products per row on desktop<input class="form-input" type="number" min="1" max="8" name="home_product_columns_desktop" value="{{ old('home_product_columns_desktop', $settings['home_product_columns_desktop'] ?? 4) }}" required></label>
-        <label>Products per row on mobile<input class="form-input" type="number" min="1" max="4" name="home_product_columns_mobile" value="{{ old('home_product_columns_mobile', $settings['home_product_columns_mobile'] ?? 2) }}" required></label>
+        <label>Products per row on desktop<input class="form-input" type="number" min="1" max="8" name="home_product_columns_desktop" value="{{ old('home_product_columns_desktop', $settings['home_product_columns_desktop'] ?? 5) }}" required></label>
+        <label>Products per row on mobile<input class="form-input" type="number" min="1" max="4" name="home_product_columns_mobile" value="{{ old('home_product_columns_mobile', $settings['home_product_columns_mobile'] ?? 3) }}" required></label>
         <div class="full"><button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Homepage Layout</button></div>
     </form>
 </section>

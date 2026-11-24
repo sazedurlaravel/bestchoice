@@ -95,7 +95,7 @@
             </div>
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <li class="nav-header">OVERVIEW</li>
+                    <li class="nav-header">Overview</li>
                     <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link @if(request()->routeIs('admin.dashboard')) active @endif"><i class="nav-icon fa-solid fa-chart-pie"></i><p>Dashboard</p></a></li>
                     @if(auth()->user()->isAdmin())<li class="nav-item"><a href="{{ route('admin.staff') }}" class="nav-link @if(request()->routeIs('admin.staff*')) active @endif"><i class="nav-icon fa-solid fa-user-shield"></i><p>Staff & Permissions</p></a></li>@endif
                     @if(auth()->user()->hasPermission('homepage.manage') || auth()->user()->hasPermission('settings.manage'))
@@ -116,7 +116,7 @@
                         </li>
                     @endif
                     @if(auth()->user()->hasPermission('orders.manage'))<li class="nav-item"><a href="{{ route('admin.orders') }}" class="nav-link @if(request()->routeIs('admin.orders*')) active @endif"><i class="nav-icon fa-solid fa-bag-shopping"></i><p>Orders</p></a></li>@endif
-                    <li class="nav-header">STORE MANAGEMENT</li>
+                    <li class="nav-header">Store management</li>
                     @if(auth()->user()->hasPermission('products.manage'))<li class="nav-item"><a href="{{ route('admin.products') }}" class="nav-link @if(request()->routeIs('admin.products*')) active @endif"><i class="nav-icon fa-solid fa-box-open"></i><p>Products</p></a></li>@endif
                     @if(auth()->user()->hasPermission('inventory.manage'))<li class="nav-item"><a href="{{ route('admin.inventory') }}" class="nav-link @if(request()->routeIs('admin.inventory*')) active @endif"><i class="nav-icon fa-solid fa-warehouse"></i><p>Inventory</p></a></li>@endif
                     @if(auth()->user()->hasPermission('purchases.manage'))<li class="nav-item"><a href="{{ route('admin.suppliers') }}" class="nav-link @if(request()->routeIs('admin.suppliers*')) active @endif"><i class="nav-icon fa-solid fa-truck-field"></i><p>Suppliers</p></a></li><li class="nav-item"><a href="{{ route('admin.purchases') }}" class="nav-link @if(request()->routeIs('admin.purchases*')) active @endif"><i class="nav-icon fa-solid fa-file-invoice-dollar"></i><p>Purchase Records</p></a></li>@endif
@@ -124,7 +124,7 @@
                     @if(auth()->user()->hasPermission('customers.view'))<li class="nav-item"><a href="{{ route('admin.customers') }}" class="nav-link @if(request()->routeIs('admin.customers*')) active @endif"><i class="nav-icon fa-solid fa-users"></i><p>Customers</p></a></li>@endif
                     @if(auth()->user()->hasPermission('coupons.manage'))<li class="nav-item"><a href="{{ route('admin.coupons') }}" class="nav-link @if(request()->routeIs('admin.coupons*')) active @endif"><i class="nav-icon fa-solid fa-ticket"></i><p>Coupons & Discounts</p></a></li>@endif
                     @if(auth()->user()->hasPermission('payments.manage'))<li class="nav-item"><a href="{{ route('admin.payments') }}" class="nav-link @if(request()->routeIs('admin.payments*')) active @endif"><i class="nav-icon fa-solid fa-credit-card"></i><p>Payments</p></a></li>@endif
-                    <li class="nav-header">CONFIGURATION</li>
+                    <li class="nav-header">Configuration</li>
                     @if(auth()->user()->hasPermission('audit.view'))<li class="nav-item"><a href="{{ route('admin.audit-logs') }}" class="nav-link @if(request()->routeIs('admin.audit-logs')) active @endif"><i class="nav-icon fa-solid fa-shield-halved"></i><p>Audit Logs</p></a></li>@endif
                     <li class="nav-item"><a href="{{ route('home') }}" class="nav-link"><i class="nav-icon fa-solid fa-arrow-up-right-from-square"></i><p>View Store</p></a></li>
                 </ul>
